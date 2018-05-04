@@ -1,0 +1,18 @@
+<div  class="maxPicModel" style="position: fixed;width: 100%;height: 100%;left: 0;top: 0;background: #000;opacity:1;text-align: center;z-index:9999;" >
+    <div id="maxPicModel" class="maxPicClass" draggable2>
+        <img ng-model="targetImg" id="targetImg" style="opacity: 1; " ng-src="{{maxPic.updateUrl}}" alt="" class="maxPicImg" >
+        <div id="imgBtn" style="position: absolute;z-index: 999999999;display: none">
+            <button id="imgConfirm" ng-click="imgConfirm(x,y,screenshotX,screenshotY)" style="cursor: pointer">确认</button>
+            <button id="imgCancel" ng-click="imgCancel()" style="cursor: pointer">取消</button>
+        </div>
+    </div>
+    <div class="pic-bar">
+        <ul style="">
+            <li id="masaike" ng-click="masaike()">马赛克</li>
+            <li ng-click="shuiyin()">水印</li>
+            <li ng-click="reset()">重置</li>
+            <li ng-click="confirm()">确认</li>
+            <li ng-click="cancel()">退出</li>
+        </ul>
+    </div>
+</div>

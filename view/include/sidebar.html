@@ -1,0 +1,36 @@
+<div class="pageSidebarOne" menu>
+    <!-- BEGIN SIDEBAR MENU -->
+    <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+    <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+    <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+    <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="desktop">
+        <a  class="toggleNav"  title="切换侧栏" href="javascript:void(0);"  alt="切换侧栏" ></a>
+    </div>
+
+    <div class="page-sidebar-menu">
+        <a   ng-href='#/order/list'  ng-class="{active1:path.indexOf('/order')!=-1}">
+            <span  class="icon1" title="订单管理" ng-class="{icon1_active:path.indexOf('/order')!=-1}"></span>
+            <span class="txt first-txt">订单管理</span>
+        </a>
+        <a   ng-href='#/goods/list'  ng-class="{active1:path.indexOf('/goods')!=-1}">
+            <span  class="icon2" title="商品管理" ng-class="{icon2_active:path.indexOf('/goods')!=-1}"></span>
+            <span class="txt first-txt">商品管理</span>
+        </a>
+        <a   ng-href='#/user/list'  ng-class="{active1:path.indexOf('/user')!=-1}">
+            <span  class="icon3" title="用户管理" ng-class="{icon3_active:path.indexOf('/user')!=-1}"></span>
+            <span class="txt first-txt">用户管理</span>
+        </a>
+        <a   ng-href='#/message/push'  ng-class="{active1:path.indexOf('/message')!=-1}">
+            <span  class="icon4" title="消息管理" ng-class="{icon4_active:path.indexOf('/message')!=-1}"></span>
+            <span class="txt first-txt">消息管理</span>
+        </a>
+        <a   ng-href='#/system/resource'  ng-class="{active1:path.indexOf('/system')!=-1}">
+            <span  class="icon0" title="系统管理" ng-class="{icon0_active:path.indexOf('/system')!=-1}"></span>
+            <span class="txt first-txt">系统管理</span>
+        </a>
+    </div>
+    <!-- END SIDEBAR MENU -->
+</div>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HASAN管理后台</title>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="css/img/wqj.png"/>
+    <link href="lib/global/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/global/css/login.css" rel="stylesheet" type="text/css" />
+    <link href="lib/global/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="lib/global/css/components.css" rel="stylesheet" type="text/css" />
+    <!--<link href="assets/global/css/animate.css" rel="stylesheet" type="text/css" />-->
+    <script type="text/javascript" src="lib/jquery/jquery.js"></script>
+    <!--<link href="assets/particles/css/style.css" rel="stylesheet" type="text/css" />-->
+
+
+    <script type="text/javascript">
+        if(navigator.userAgent.indexOf("MSIE 6.0")>0||navigator.userAgent.indexOf("MSIE 7.0")>0||navigator.userAgent.indexOf("MSIE 8.0")>0||navigator.userAgent.indexOf("MSIE 9.0")>0)
+        {
+            window.open("/admin/empLogin/error");
+        }
+    </script>
+</head>
+<body>
+<div class="login animated fadeInRight">
+    <div class="logo">
+    </div>
+    <div class="menu-toggler sidebar-toggler">
+    </div>
+    <div class="content">
+        <div class="login-form">
+            <h3 class="form-title">后台管理</h3>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">用户名</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input id="username" class="form-control placeholder-no-fix" type="text" placeholder="用户名" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">密码</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input id="password" type="password" class="form-control placeholder-no-fix" placeholder="密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">服务器</label>
+                <select id="apiUrl">
+                    <option value="zxlUrl">张辛林本地</option>
+                    <option value="fsdUrl">樊水东本地</option>
+                    <option value="online">服务器</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <div id="login" class="btn blue pull-right">
+                    登录 <i class="m-icon-swapright m-icon-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="copyright">-->
+        <!--2018 © 浙江微鱼网络科技有限公司-->
+    <!--</div>-->
+</div>
+
+<div id="particles-js"></div>
+
+</body>
+<!--<script type="text/javascript" src="assets/particles/js/particles.js"></script>-->
+<!--<script type="text/javascript" src="assets/particles/js/app.js"></script>-->
+<!--<script type="text/javascript" src="assets/particles/js/stats.js"></script>-->
+<script>
+    $(document).ready(function() {
+        var width=$(".content").width();
+        //设置居中显示
+        $(".login").css("margin-left",-(width)/2+"px");
+
+        //判断是否支持sessionStorage
+        if(window.sessionStorage) {} else {
+            alert("浏览暂不支持sessionStorage");
+            return;
+        }
+
+        //点击登陆按钮
+        $("#login").click(function() {
+            valid();
+        });
+
+        //键盘按返回
+        $('body').bind('keydown', function () {
+            if (event.keyCode == 13) {
+                $('#login').click();
+            }
+        });
+        //判断是否填写正确
+        function valid() {
+            var blank = RegExp(/[(\ )]+/);
+            //用户名
+            var username = $("#username").val();
+            if(username == "" || username.length == 0) {
+                alert("账户不能为空");
+                return false;
+            }
+            var password = $("#password").val();
+            if(password == "") {
+                alert("密码不能为空");
+                return false;
+            }
+            if(blank.test(password)) {
+                alert("密码不能为空格");
+                return false;
+            }
+            submit();
+        }
+        //
+        function submit() {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            url = Url[$("#apiUrl").val()];
+//              url = Url.online;
+            $.ajax({
+                type:'post',
+                contentType:"application/json",
+                url: url+'hasan/common/login',
+                data: JSON.stringify({
+                    "client":"BROWSER",
+                    "usernameType":"MOBILE",
+                    "deviceType": "PC",
+                    "os": "WINDOWS",
+                    "username":username,
+                    "password":password
+                }),
+                success: function(data) {
+                    if(data.code == "code.success") {
+                        window.localStorage.setItem("token", data.attach.token);
+                        window.localStorage.setItem("userName", username);
+                        window.localStorage.setItem("adminId", data.attach.uid);
+                        window.localStorage.setItem("apiUrl", $("#apiUrl").val());
+//                        window.localStorage.setItem("apiUrl", "online");
+                        window.location.href = "index.html";
+                    } else {
+                        alert(data.desc);
+                    }
+                },
+                error: function(e) {
+
+                }
+            })
+        }
+
+        var Url = {
+            zxlUrl:"http://172.16.20.92:8080/",
+            fsdUrl:"http://172.16.20.93:8089/",
+            online:"http://183.131.205.202/"
+        };
+    });
+
+</script>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js" > <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js" > <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<head>
+    <title data-ng-bind="$state.current.data.pageTitle"></title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/table.css">
+    <link href="lib/global/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/global/css/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/global/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/global/css/angular-datepicker.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="lib/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="lib/select2/select2.css">
+    <link rel="stylesheet" href="lib/bootstrap-toastr/toastr.css">
+    <link href="assets/ztree/css/metroStyle/metroStyle.css" rel="stylesheet" />
+</head>
+<!-- END HEAD -->
+<body ng-controller="AppController">
+
+<div class="landmark" landanimation></div>
+<div data-ng-include="'view/include/header.html'" data-ng-controller="HeaderController"></div>
+<div class="clearfix"></div>
+<div class="page-container">
+    <div data-ng-include="'view/include/sidebar.html'" data-ng-controller="IndexSidebarController" id="page-sidebar-wrapper"></div>
+    <div class="page-content-wrapper">
+        <div class="page-content" id="page-content">
+            <div ui-view class="bigPage page {{pageClass}}"></div>
+        </div>
+    </div>
+</div>
+
+<script src="lib/requirejs/require.js"></script>
+<script src="js/main.js"></script>
+</body>
+<!-- END BODY -->
+</html>

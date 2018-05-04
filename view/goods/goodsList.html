@@ -1,0 +1,108 @@
+<div class="tableToolbar">
+    <div class="coll-md-9" id="addInput">
+        <div class="coll-md-2">
+            <input type="text" class='search' placeholder="名称" ng-model="name">
+        </div>
+
+        <div class="coll-md-4 scalenone"  id="searchdate" datahide>
+            <div class="coll-md-5" >
+                <p class="input-group">
+                    <input type="text" class="search" placeholder="添加开始时间" uib-datepicker-popup="yyyy-MM-dd"
+                           ng-model="beginTime" is-open="popup1.opened" datepicker-options="dateOptions"/>
+                    <span class="input-group-btn">
+							            <button type="button" class="small-icon btn btn-default" ng-click="open1()"><i
+                                                class="glyphicon glyphicon-calendar"></i></button>
+							          </span>
+                </p>
+            </div>
+            <div class="coll-md-5">
+                <p class="input-group inline">
+                    <input type="text" class="search" placeholder="添加结束时间" uib-datepicker-popup="yyyy-MM-dd"
+                           ng-model="endTime" is-open="popup2.opened" datepicker-options="dateOptions"/>
+                    <span class="input-group-btn">
+							            <button type="button" class="small-icon btn btn-default" ng-click="open2()"><i
+                                                class="glyphicon glyphicon-calendar"></i></button>
+							          </span>
+                </p>
+            </div>
+        </div>
+        <div class="coll-md-1">
+            <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search()">
+            <input type="button" class="small-icon search2" value="搜索">
+            <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="reset()">
+            <input type="button" class="small-icon reset" value="重置">
+
+            <div class="dropdown-menu-right">
+                <input type="button" class="small-icon more-icon" value="更多" title='更多搜索项' id="more-icon" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                <input type="button" class="small-icon more" value="更多">
+                <ul class="dropdown-menu" style='margin-left:80px;' aria-labelledby="dropdownMenu2" more-search>
+                    <li><a href="javascript:;">日期搜索</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="coll-md-1">
+        <input type="button" class="bttn pos-right"  ng-click="add()" value="新建">
+    </div>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>商品名称</th>
+        <th>商品描述</th>
+        <th>原价</th>
+        <th>普通会员价</th>
+        <th>高级会员价</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in cfgBankList">
+        <td>{{item.code}}</td>
+        <th>{{item.name}}</th>
+        <td style="padding:4px 0;"><img ng-src="{{item.icon}}" width="80" height="50"/></td>
+        <th>{{item.created | timeFliter}}</th>
+        <td>
+            <a ng-click="update(item.code)">编辑</a>
+            <a ng-click="delete(item.code)">删除</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize">
+<uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages()"></uib-pagination>
+</div>
+
+<!--新建弹窗-->
+<modal title="编辑" visible="goodsModal">
+    <form class="form-horizontal" role="form" name="myForm" ng-submit="submit(myForm.$valid)" >
+        <div class="form-body">
+            <div class="row" style="margin-top: 20px;">
+                <!--<div class="col-md-12">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label col-md-2">银行<strong class="error" ng-if="myForm.code.$invalid">&nbsp;(必填)</strong></label>-->
+                        <!--<div class="col-md-10">-->
+                            <!--<select required class="form-control" ui-select2="select2Options" ng-model="bank.code" name="code" ng-readonly="!isAdd">-->
+                                <!--<option selected hidden disabled value="">选择银行</option>-->
+                                <!--<option ng-repeat="item in banks" value="{{item.value}}">{{item.text}}</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-12">-->
+                    <!--<div class="form-group">-->
+                        <!--<label  class="control-label col-md-2">选择商品图片</label>-->
+                        <!--<div class="col-md-10">-->
+                            <!--<input id="icon" name ="icon" type="file" class="file"-->
+                                   <!--onchange='angular.element(this).scope().fileChange(this)' />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="buttonArea col-md-12" style="border:none">
+                    <button type="submit" class="btn blue" ng-disabled="myForm.$invalid">提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>
+

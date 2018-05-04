@@ -1,0 +1,52 @@
+
+<div class="pageHeaderOne">
+	<a href='' ui-sref=".index" class="page-logo"  back-to-index>管理后台</a>
+	<ul class="pull-right">
+		<li><a href="#" ng-click="logout()">退出 </a></li>
+		<li><a href="#" ng-click="changePsw()">修改密码 </a></li>
+		<li class="user">欢迎您，{{userName}}</li>
+		<li>{{sysTime}}</li>
+	</ul>
+</div>
+
+<modal title="修改密码" visible="changeModal">
+	<form class="form-horizontal" role="form">
+		<div class="form-body">
+			<div class="row" >
+					<div class="col-md-3">
+						<label class="control-label col-md-12">新密码：</label>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+
+							<div class="col-md-8">
+								<input type="password" class="form-control" ng-model="list.newPass" placeholder="请输入新密码">
+							</div>
+							<div class="col-md-4">
+
+							</div>
+						</div>
+					</div>
+			</div>
+			<div class="row" >
+				<div class="col-md-3">
+					<label class="control-label col-md-12">确认新密码：</label>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+
+						<div class="col-md-8">
+							<input type="password" class="form-control" ng-model="list.newPassword" placeholder="请再次输入新密码">
+						</div>
+						<div class="col-md-4 error" ng-if='list.newPassword!="" && list.newPassword!=list.newPass'>
+                             两次密码输入不一致
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="buttonArea col-md-12">
+				<button type="submit" class="btn blue" ng-click="confirm()">确定</button>
+			</div>
+		</div>
+	</form>
+</modal>
