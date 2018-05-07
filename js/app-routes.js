@@ -10,8 +10,8 @@ define(function (require) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         $rootScope.path = $location.path();
-        $rootScope.userName = window.localStorage.getItem("userName");
-        $rootScope.adminId = window.localStorage.getItem("adminId");
+        $rootScope.userName = window.localStorage.getItem("h_userName");
+        $rootScope.adminId = window.localStorage.getItem("h_adminId");
         $rootScope.defaultPageSize = 10;
     }]);
     app.controller('AppController', ['$scope','$rootScope', function($scope,$rootScope) {
@@ -20,85 +20,43 @@ define(function (require) {
     app.controller('HeaderController', ['$rootScope', '$scope', '$http','$interval','$timeout','$filter',
         function($rootScope, $scope, $http,$interval,$timeout,$filter) {
             //退出
-        //     $scope.logout = function() {
-        //         $http({
-        //             method: 'POST',
-        //             url: "manager/logout",
-        //             data:{}
-        //         }).success(function(data) {
-        //             if(data.code==0)
-        //                 window.location.href = "login.html";
-        //         }).error(function(data) {});
-        //     };
-        //     $scope.changePsw = function() {
-        //         $scope.changeModal = !$scope.changeModal;
-        //         $scope.list = {};
-        //         $scope.Verification = {};
-        //         $scope.Verification.getCodeTest = '获取短信验证码';
-        //         $scope.Verification.isTimeOut = false;
-        //         $scope.Verification.time = '';
-        //     };
-        //
-        //     $scope.getCode=function(){
-        //         $http({
-        //             method: 'POST',
-        //             url: "/admin/sysUser/modifyMobileSendMessage",
-        //             data:{}
-        //         }).success(function(data) {
-        //             (data);
-        //             if(data.result=='success'){
-        //
-        //                 $scope.Verification.getCodeTest='重新发送';
-        //                 $scope.Verification.time=60;
-        //                 $scope.Verification.isTimeOut=true;
-        //
-        //                 $interval(function () {
-        //                     if($scope.Verification.time==0){
-        //                         $scope.Verification.isTimeOut=false;
-        //                         $scope.Verification.getCodeTest='获取短信验证码';
-        //                         $scope.Verification.time='';
-        //                     }else{
-        //                         $scope.Verification.time--;
-        //                     }
-        //                 },1000);
-        //             }else{
-        //                 toastr.error('发送失败');
-        //                 $scope.Verification.isTimeOut=false;
-        //                 $scope.Verification.getCodeTest='获取短信验证码';
-        //                 $scope.Verification.time='';
-        //             }
-        //
-        //         }).error(function(data) {
-        //             toastr.error('通讯失败')
-        //         });
-        //     };
-        //
-        //     $scope.confirm= function () {
-        //         $http({
-        //             method: 'POST',
-        //             url: "/admin/sysuser/modifyPass",
-        //             data:{
-        //                 newPassword:$scope.list.newPassword,
-        //                 mobileCode:$scope.list.mobileCode,
-        //             }
-        //         }).success(function(data) {
-        //             (data);
-        //             if(data.result=='success'){
-        //                 toastr.success('修改成功');
-        //                 $scope.changeModal = !$scope.changeModal;
-        //                 $timeout(function () {
-        //                     location.reload();
-        //                 },1000);
-        //
-        //             }else{
-        //                 toastr.error(data.messageText);
-        //                 $scope.Verification.isTimeOut2=false;
-        //                 $scope.Verification.getCodeTest2='获取短信验证码';
-        //                 $scope.Verification.time2='';
-        //             }
-        //
-        //         }).error(function(data) {});
-        //     };
+            $scope.logout = function() {
+                $http({
+                    method: 'POST',
+                    url: "hasan/common/logout",
+                    data:{}
+                }).success(function(data) {
+                    if(data.code=="code.success")
+                        window.location.href = "login.html";
+                }).error(function(data) {});
+            };
+            $scope.changePsw = function() {
+                $scope.changeModal = !$scope.changeModal;
+                $scope.list = {};
+            };
+
+            $scope.confirm= function () {
+                if($scope.list.newPwd != $scope.list.newPassword){
+                    toastr.error('两次密码输入不匹配');
+                    return;
+                }
+                $http({
+                    method: 'POST',
+                    url: "hasan/common/pwd/modify",
+                    data:{
+                        pwd:$scope.list.newPwd,
+                        opwd:$scope.list.oldPwd
+                    }
+                }).success(function(data) {
+                    if(data.code=="code.success"){
+                        toastr.success('修改成功');
+                        $scope.changeModal = !$scope.changeModal;
+                        $timeout(function () {
+                            location.reload();
+                        },1000);
+                    }
+                }).error(function(data) {});
+            };
         }
 
     ]);

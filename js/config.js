@@ -5,7 +5,7 @@ define(function (require) {
         return{
             request:function(config) {
                 config.headers = config.headers || {};
-                config.headers.token = window.localStorage.getItem("token");
+                config.headers.token = window.localStorage.getItem("h_token");
                 if(!config.headers.token){
                     window.location.href = "login.html";
                     return;
@@ -16,7 +16,7 @@ define(function (require) {
                         if(!$rootScope.response)
                             $('.landmark').addClass('landmark-block');
                     }, 500);
-                    config.url = Url.hasan[window.localStorage.getItem("apiUrl")]+config.url;
+                    config.url = Url.hasan[window.localStorage.getItem("h_apiUrl")]+config.url;
                     config.data.client = "BROWSER";
                     config.data.usernameType = "MOBILE";
                     config.data.deviceType = "PC";
@@ -31,7 +31,7 @@ define(function (require) {
                 if(response.data.code == 110 || response.data.code == 111){
                     window.location.href = "login.html";
                 }
-                if(response.data.code>0){
+                if(response.data.code && response.data.code!= "code.success"){
                     toastr.error(response.data.desc);
                 }
                 $rootScope.response = true;

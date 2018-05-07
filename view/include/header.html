@@ -13,33 +13,47 @@
 	<form class="form-horizontal" role="form">
 		<div class="form-body">
 			<div class="row" >
-					<div class="col-md-3">
-						<label class="control-label col-md-12">新密码：</label>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
+				<div class="col-md-4">
+					<label class="control-label col-md-12">原密码：</label>
+				</div>
+				<div class="col-md-8">
+					<div class="form-group">
+						<div class="col-md-8">
+							<input type="password" class="form-control" ng-model="list.oldPwd" placeholder="请输入原密码">
+						</div>
+						<div class="col-md-4">
 
-							<div class="col-md-8">
-								<input type="password" class="form-control" ng-model="list.newPass" placeholder="请输入新密码">
-							</div>
-							<div class="col-md-4">
-
-							</div>
 						</div>
 					</div>
+				</div>
 			</div>
 			<div class="row" >
-				<div class="col-md-3">
+				<div class="col-md-4">
+					<label class="control-label col-md-12">新密码：</label>
+				</div>
+				<div class="col-md-8">
+					<div class="form-group">
+						<div class="col-md-8">
+							<input type="password" class="form-control" ng-model="list.newPwd" placeholder="请输入新密码">
+						</div>
+						<div class="col-md-4">
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" >
+				<div class="col-md-4">
 					<label class="control-label col-md-12">确认新密码：</label>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-8">
 					<div class="form-group">
 
 						<div class="col-md-8">
 							<input type="password" class="form-control" ng-model="list.newPassword" placeholder="请再次输入新密码">
 						</div>
-						<div class="col-md-4 error" ng-if='list.newPassword!="" && list.newPassword!=list.newPass'>
-                             两次密码输入不一致
+						<div class="col-md-4 error" ng-if='list.newPassword!="" && list.newPassword!=list.newPwd'>
+							两次密码输入不一致
 						</div>
 					</div>
 				</div>
@@ -47,6 +61,7 @@
 			<div class="buttonArea col-md-12">
 				<button type="submit" class="btn blue" ng-click="confirm()">确定</button>
 			</div>
+
 		</div>
 	</form>
 </modal>

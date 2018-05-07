@@ -22,6 +22,7 @@ require.config({
         'highchart':'lib/highcharts/highstock',
         'highchartng':'lib/highcharts/highcharts-ng',
         'angular-datepicker':'lib/angular-datepicker',
+        'bootstrap-fileinput-zh':'lib/bootstrap-fileinput/js/locales/zh',
         'bootstrap-fileinput':'lib/bootstrap-fileinput/js/fileinput',
         'bootstrap-switch':'lib/bootstrap-switch-master/dist/js/bootstrap-switch.min',
         'ztree':'lib/ztree/js/jquery.ztree.all.min'

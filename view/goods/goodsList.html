@@ -54,17 +54,22 @@
         <th>原价</th>
         <th>普通会员价</th>
         <th>高级会员价</th>
+        <th>添加时间</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="item in cfgBankList">
-        <td>{{item.code}}</td>
-        <th>{{item.name}}</th>
-        <td style="padding:4px 0;"><img ng-src="{{item.icon}}" width="80" height="50"/></td>
-        <th>{{item.created | timeFliter}}</th>
+    <tr ng-repeat="item in goodsList">
+        <td>{{item.name}}</td>
+        <td>{{item.desc}}</td>
+        <td>{{item.originalPrice}}</td>
+        <td>{{item.generalPrice}}</td>
+        <td>{{item.VIPPrice}}</td>
+        <!--<td style="padding:4px 0;"><img ng-src="{{item.icon}}" width="80" height="50"/></td>-->
+        <td>{{item.created | timeFilter}}</td>
         <td>
-            <a ng-click="update(item.code)">编辑</a>
-            <a ng-click="delete(item.code)">删除</a>
+            <a ng-click="update(item.id)">编辑</a>
+            <a ng-click="delete(item.id)">删除</a>
         </td>
     </tr>
     </tbody>
@@ -74,32 +79,112 @@
 </div>
 
 <!--新建弹窗-->
-<modal title="编辑" visible="goodsModal">
+<modal title="添加" visible="addGoodsModal">
     <form class="form-horizontal" role="form" name="myForm" ng-submit="submit(myForm.$valid)" >
         <div class="form-body">
-            <div class="row" style="margin-top: 20px;">
-                <!--<div class="col-md-12">-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label col-md-2">银行<strong class="error" ng-if="myForm.code.$invalid">&nbsp;(必填)</strong></label>-->
-                        <!--<div class="col-md-10">-->
-                            <!--<select required class="form-control" ui-select2="select2Options" ng-model="bank.code" name="code" ng-readonly="!isAdd">-->
-                                <!--<option selected hidden disabled value="">选择银行</option>-->
-                                <!--<option ng-repeat="item in banks" value="{{item.value}}">{{item.text}}</option>-->
-                            <!--</select>-->
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active" id="goodsInfo"><a  href="#item1" data-toggle="tab">商品基础属性</a></li>
+                <li id="uploadPic" style="display: block"><a href="#item2" data-toggle="tab" id="picTab" ng-click="initFileInput()">{{goods.name}}_图片上传</a></li>
+            </ul>
+            <div class="tab-content" style="margin-top:10px;">
+                <!--商品基础属性-->
+                <div class="tab-pane fade in active" id="item1" >
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">商品名称:<strong class="error" ng-if="myForm.name.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="text" class="form-control" data-ng-model="goods.name" name="name" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">排序号:<strong class="error" ng-if="myForm.priority.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.priority" name="priority" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">库存:<strong class="error" ng-if="myForm.inventory.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.inventory" name="inventory" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">原价:<strong class="error" ng-if="myForm.originalPrice.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.originalPrice" name="originalPrice" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">普通会员价:<strong class="error" ng-if="myForm.generalPrice.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.generalPrice" name="generalPrice" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">VIP价:<strong class="error" ng-if="myForm.VIPPrice.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.VIPPrice"  name="VIPPrice" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label  class="control-label col-md-2">描述:<strong class="error" ng-if="myForm.desc.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" data-ng-model="goods.desc" name="desc" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttonArea col-md-12" style="border:none">
+                            <button type="submit" class="btn blue" ng-disabled="myForm.$invalid">下一步</button>
+                        </div>
+                    </div>
+                </div>
+                <!--图片上传-->
+                <div class="tab-pane fade" id="item2">
+                    <div class="col-md-12" style="margin: 20px 0;font-size: 18px;background: #efeff5;padding: 10px 0">
+                        <strong>商品ICON</strong>
+                    </div>
+                    <div class="row">
+                        <!--<div class="col-md-5">-->
+                            <!--<div class="form-group">-->
+                                <!--<label  class="control-label col-md-4">名称:<strong class="error" ng-if="myForm.rName.$invalid">&nbsp;(必填)</strong></label>-->
+                                <!--<div class="col-md-8">-->
+                                    <!--<input  id="rName" type="text" class="form-control" data-ng-model="resource.name"  name="rName" required/>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="col-md-12">-->
-                    <!--<div class="form-group">-->
-                        <!--<label  class="control-label col-md-2">选择商品图片</label>-->
-                        <!--<div class="col-md-10">-->
-                            <!--<input id="icon" name ="icon" type="file" class="file"-->
-                                   <!--onchange='angular.element(this).scope().fileChange(this)' />-->
+                        <!--<div class="col-md-5">-->
+                            <!--<div class="form-group">-->
+                                <!--<label  class="control-label col-md-4">排序号:<strong class="error" ng-if="myForm.rPriority.$invalid">&nbsp;(必填)</strong></label>-->
+                                <!--<div class="col-md-8">-->
+                                        <!--<input id="rPriority" type="number" class="form-control" data-ng-model="resource.priority"  name="rPriority" required/>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <div class="buttonArea col-md-12" style="border:none">
-                    <button type="submit" class="btn blue" ng-disabled="myForm.$invalid">提交</button>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input id="icon" name="source" type="file" multiple
+                                           onchange='angular.element(this).scope().fileChange(this)' />
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="buttonArea col-md-12" style="border:none">-->
+                            <!--<button type="button" class="btn blue" data-ng-click="uploadResource()">上传</button>-->
+                        <!--</div>-->
+                    </div>
                 </div>
             </div>
         </div>

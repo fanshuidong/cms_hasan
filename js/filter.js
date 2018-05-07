@@ -14,4 +14,16 @@ define(function(require) {
         }
     });
 
+    //时间过滤展示
+    app.filter("timeFilter",function(DateUtil){
+        return function(str){
+            var out=str;
+            if(str==0 || str==null){
+                out="/"
+            }else{
+                out=DateUtil.getFormateDate(new Date(str*1000));
+            }
+            return out;
+        }
+    });
 });

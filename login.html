@@ -132,10 +132,10 @@
                 }),
                 success: function(data) {
                     if(data.code == "code.success") {
-                        window.localStorage.setItem("token", data.attach.token);
-                        window.localStorage.setItem("userName", username);
-                        window.localStorage.setItem("adminId", data.attach.uid);
-                        window.localStorage.setItem("apiUrl", $("#apiUrl").val());
+                        window.localStorage.setItem("h_token", data.attach.token);
+                        window.localStorage.setItem("h_userName", username);
+                        window.localStorage.setItem("h_adminId", data.attach.uid);
+                        window.localStorage.setItem("h_apiUrl", $("#apiUrl").val());
 //                        window.localStorage.setItem("apiUrl", "online");
                         window.location.href = "index.html";
                     } else {
