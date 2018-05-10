@@ -85,7 +85,8 @@ define(function (require) {
                             $scope.childrenResourceList.push(data.attach[j]);
                         }
                     }
-                    $scope.parentResourceList.push(data.attach[i]);
+                    if($scope.childrenResourceList.length>0)
+                        $scope.parentResourceList.push(data.attach[i]);
                     $rootScope.resourceMapping["/"+data.attach[i].url] =$scope.childrenResourceList;
                 }
             }
@@ -223,11 +224,20 @@ define(function (require) {
             {value:"MOBILE",text:"手机",mark:2},
             {value:"TABLET",text:"平板",mark:4}
         ];
+        this.orderState = [
+            {value:"INIT",text:"待支付",mark:1},
+            {value:"PAYING",text:"支付中",mark:2},
+            {value:"PAID",text:"待发货",mark:3},
+            {value:"DELIVERED",text:"待收货",mark:4},
+            {value:"RECEIVED",text:"待评价",mark:5},
+            {value:"FINISH",text:"已完结",mark:6}
+        ];
         this.enumConfig = {
             goodsState:this.goodsState,
             os:this.os,
             client:this.client,
-            deviceType:this.deviceType
+            deviceType:this.deviceType,
+            orderState:this.orderState
         };
     });
     //日期转化服务
