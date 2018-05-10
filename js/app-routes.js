@@ -14,8 +14,14 @@ define(function (require) {
         $rootScope.adminId = window.localStorage.getItem("h_adminId");
         $rootScope.defaultPageSize = 10;
     }]);
-    app.controller('AppController', ['$scope','$rootScope', function($scope,$rootScope) {
-
+    app.controller('AppController', ['$scope','$rootScope', '$http',function($scope,$rootScope,$http) {
+        $http({
+            method: 'POST',
+            url:"hasan/common/configs",
+            data:{}
+        }).success(function(data) {
+            $rootScope.GlobalConfig=data.attach;
+        });
     }]);
     app.controller('HeaderController', ['$rootScope', '$scope', '$http','$interval','$timeout','$filter',
         function($rootScope, $scope, $http,$interval,$timeout,$filter) {
@@ -55,7 +61,7 @@ define(function (require) {
                             location.reload();
                         },1000);
                     }
-                }).error(function(data) {});
+                });
             };
         }
 
@@ -190,6 +196,12 @@ define(function (require) {
                 templateUrl: "view/system/api.html",
                 controllerUrl: 'viewjs/system/apiCtrl.js',
                 controller: "apiCtrl"
+            })
+            .state("system.config", {
+                url: "/config",
+                templateUrl: "view/system/config.html",
+                controllerUrl: 'viewjs/system/configCtrl.js',
+                controller: "configCtrl"
             })
     }]);
 
