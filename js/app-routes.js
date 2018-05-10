@@ -197,7 +197,7 @@ define(function (require) {
         this.hasan = {
             zxlUrl:"http://172.16.20.92:8080/",
             fsdUrl:"http://172.16.20.93:8089/",
-            online:"http://183.131.205.202/"
+            online:"http://121.196.193.96/"
         };
     });
     //定义枚举实体
