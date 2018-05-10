@@ -11,26 +11,26 @@
     </div>
 
     <div class="page-sidebar-menu">
-        <a   ng-href='#/order/list'  ng-class="{active1:path.indexOf('/order')!=-1}">
-            <span  class="icon1" title="订单管理" ng-class="{icon1_active:path.indexOf('/order')!=-1}"></span>
-            <span class="txt first-txt">订单管理</span>
+        <a  ng-href='{{item.href}}' ng-repeat="item in parentResourceList" data-ng-click="setPath(item.href)"  id="{{item.css}}"  ng-class="{active1:path.indexOf('/{{item.url}}')!=-1}">
+            <span  class="{{item.css}}" title="{{item.name}}" ng-class="{active:path.indexOf('/{{item.url}}')!=-1}"></span>
+            <span class="txt first-txt">{{item.name}}</span>
         </a>
-        <a   ng-href='#/goods/list'  ng-class="{active1:path.indexOf('/goods')!=-1}">
-            <span  class="icon2" title="商品管理" ng-class="{icon2_active:path.indexOf('/goods')!=-1}"></span>
-            <span class="txt first-txt">商品管理</span>
-        </a>
-        <a   ng-href='#/user/list'  ng-class="{active1:path.indexOf('/user')!=-1}">
-            <span  class="icon3" title="用户管理" ng-class="{icon3_active:path.indexOf('/user')!=-1}"></span>
-            <span class="txt first-txt">用户管理</span>
-        </a>
-        <a   ng-href='#/message/push'  ng-class="{active1:path.indexOf('/message')!=-1}">
-            <span  class="icon4" title="消息管理" ng-class="{icon4_active:path.indexOf('/message')!=-1}"></span>
-            <span class="txt first-txt">消息管理</span>
-        </a>
-        <a   ng-href='#/system/resource'  ng-class="{active1:path.indexOf('/system')!=-1}">
-            <span  class="icon0" title="系统管理" ng-class="{icon0_active:path.indexOf('/system')!=-1}"></span>
-            <span class="txt first-txt">系统管理</span>
-        </a>
+        <!--<a   ng-href='#/goods/list'  ng-class="{active1:path.indexOf('/goods')!=-1}">-->
+            <!--<span  class="icon2" title="商品管理" ng-class="{icon2_active:path.indexOf('/goods')!=-1}"></span>-->
+            <!--<span class="txt first-txt">商品管理</span>-->
+        <!--</a>-->
+        <!--<a   ng-href='#/user/list'  ng-class="{active1:path.indexOf('/user')!=-1}">-->
+            <!--<span  class="icon3" title="用户管理" ng-class="{icon3_active:path.indexOf('/user')!=-1}"></span>-->
+            <!--<span class="txt first-txt">用户管理</span>-->
+        <!--</a>-->
+        <!--<a   ng-href='#/message/push'  ng-class="{active1:path.indexOf('/message')!=-1}">-->
+            <!--<span  class="icon4" title="消息管理" ng-class="{icon4_active:path.indexOf('/message')!=-1}"></span>-->
+            <!--<span class="txt first-txt">消息管理</span>-->
+        <!--</a>-->
+        <!--<a   ng-href='#/system/resource'  ng-class="{active1:path.indexOf('/system')!=-1}">-->
+            <!--<span  class="icon0" title="系统管理" ng-class="{icon0_active:path.indexOf('/system')!=-1}"></span>-->
+            <!--<span class="txt first-txt">系统管理</span>-->
+        <!--</a>-->
     </div>
     <!-- END SIDEBAR MENU -->
 </div>

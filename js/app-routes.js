@@ -5,8 +5,8 @@ define(function (require) {
     var toastr=require('toastr');
     var datepicker = require('datepicker');
 
-    app.run(['$state', '$stateParams', '$rootScope','$location','$window','$log','$http',
-        function ($state, $stateParams, $rootScope,$location,$window,$log,$http) {
+    app.run(['$state', '$stateParams', '$rootScope','$location','$window','$log','$http','enums',
+        function ($state, $stateParams, $rootScope,$location,$window,$log,$http,enums) {
         $rootScope.$state = $state;
         $rootScope.$stateParams = $stateParams;
         $rootScope.path = $location.path();
@@ -62,35 +62,45 @@ define(function (require) {
     ]);
 
     //主页左侧导航栏ctrl
-    app.controller('IndexSidebarController', ['$scope','$http', '$rootScope',function($scope,$http,$rootScope) {
-        $scope.uiSref = {};
-        $scope.resourceIds = [];
-        // $http({
-        //     method: 'POST',
-        //     url: "manager/admin/resource",
-        //     data:{}
-        // }).success(function(data) {
-        //     for(var i=0;i<data.attach.length;i++){
-        //         $scope.resourceIds.push(data.attach[i].resourceSort);
-        //         if(data.attach[i].parentId === 0){
-        //             for(var j=0;j<data.attach.length;j++){
-        //                 if(data.attach[j].parentId === data.attach[i].id){
-        //                     $scope.uiSref[data.attach[i].resourceCode]='#/'+data.attach[i].resourceCode +'/'+ data.attach[j].resourceUrl;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // });
-        // $rootScope.show = function(resourceId) {
-        //     if($scope.resourceIds.indexOf(resourceId) != -1) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // }
+    app.controller('IndexSidebarController', ['$scope','$http', '$rootScope','$location',function($scope,$http,$rootScope,$location) {
+        $scope.parentResourceList = [];
+        $rootScope.resourceMapping = {};
+        $http({
+            method: 'POST',
+            url: "hasan/authority/modular/list/user",
+            data:{}
+        }).success(function(data) {
+            for(var i=0;i<data.attach.length;i++){
+                if(data.attach[i].parent === 0){
+                    $scope.childrenResourceList = [];
+                    for(var j=0;j<data.attach.length;j++){
+                        if(data.attach[j].parent === data.attach[i].id){
+                            if(!data.attach[i].href){
+                                data.attach[i].href = '#/'+data.attach[i].url +'/'+ data.attach[j].url;
+                            }
+                            if($location.path()==""){
+                                var path='/'+data.attach[i].url +'/'+ data.attach[j].url;
+                                $location.path(path);
+                            }
+                            $scope.childrenResourceList.push(data.attach[j]);
+                        }
+                    }
+                    $scope.parentResourceList.push(data.attach[i]);
+                    $rootScope.resourceMapping["/"+data.attach[i].url] =$scope.childrenResourceList;
+                }
+            }
+            $rootScope.path = $location.path();
+        });
+        $scope.setPath = function (url) {
+            $rootScope.path = url;
+        }
     }]);
-    app.controller('SidebarController', ['$scope','$http', '$rootScope',function($scope,$http,$rootScope) {
+    app.controller('SidebarController', ['$scope','$http', '$rootScope','$location',function($scope,$http,$rootScope,$location) {
+        //获取子模块列表
+        $scope.key = $location.path().substring(0,$location.path().lastIndexOf('/'));
+        $scope.setPath = function (url) {
+            $rootScope.path = $scope.key+"/"+url;
+        }
     }]);
 
 
@@ -99,7 +109,6 @@ define(function (require) {
     }]);
 
     app.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('index');
         $stateProvider
             .state("index", {
             	url: "/index",
@@ -110,7 +119,7 @@ define(function (require) {
             //订单管理
             .state("order", {
                 url: "/order",
-                templateUrl: "view/order/order.html"
+                templateUrl: "view/include/module.html"
             })
             .state("order.list", {
                 url: "/list",
@@ -122,7 +131,7 @@ define(function (require) {
             //商品管理
             .state("goods", {
                 url: "/goods",
-                templateUrl: "view/goods/goods.html"
+                templateUrl: "view/include/module.html"
             })
             .state("goods.list", {
                 url: "/list",
@@ -133,19 +142,13 @@ define(function (require) {
             //用户管理
             .state("user", {
                 url: "/user",
-                templateUrl: "view/user/user.html"
+                templateUrl: "view/include/module.html"
             })
             .state("user.list", {
                 url: "/list",
                 templateUrl: "view/user/userList.html",
-                controllerUrl: 'viewjs/list/userListCtrl.js',
+                controllerUrl: 'viewjs/user/userListCtrl.js',
                 controller: "userListCtrl"
-            })
-            .state("user.role", {
-                url: "/role",
-                templateUrl: "view/user/role.html",
-                controllerUrl: 'viewjs/user/roleCtrl.js',
-                controller: "roleCtrl"
             })
             .state("user.member", {
                 url: "/role",
@@ -156,7 +159,7 @@ define(function (require) {
             //消息管理
             .state("message", {
                 url: "/message",
-                templateUrl: "view/message/message.html"
+                templateUrl: "view/include/module.html"
             })
             .state("message.push", {
                 url: "/push",
@@ -167,13 +170,25 @@ define(function (require) {
             //系统配置
             .state("system", {
                 url: "/system",
-                templateUrl: "view/system/system.html"
+                templateUrl: "view/include/module.html"
+            })
+            .state("system.role", {
+                url: "/role",
+                templateUrl: "view/system/role.html",
+                controllerUrl: 'viewjs/system/roleCtrl.js',
+                controller: "roleCtrl"
             })
             .state("system.resource", {
                 url: "/resource",
                 templateUrl: "view/system/resource.html",
                 controllerUrl: 'viewjs/system/resourceCtrl.js',
                 controller: "resourceCtrl"
+            })
+            .state("system.api", {
+                url: "/api",
+                templateUrl: "view/system/api.html",
+                controllerUrl: 'viewjs/system/apiCtrl.js',
+                controller: "apiCtrl"
             })
     }]);
 
@@ -186,6 +201,34 @@ define(function (require) {
     });
     //定义枚举实体
     app.service('enums',function () {
+        this.goodsResource = [1000,1001,1002,1003];
+
+        this.goodsState = [
+            {value:"SALE",text:"出售中",mark:1,color:"green"},
+            {value:"OFF_SHELVES",text:"下架",mark:2,color:"red"}
+        ];
+        this.os = [
+            {value:"IOS",text:"苹果",mark:1},
+            {value:"ANDROID",text:"安卓",mark:2},
+            {value:"WINPHONE",text:"winphone",mark:3},
+            {value:"WINDOWS",text:"windos系统",mark:4},
+            {value:"LINUX",text:"linux系统",mark:5}
+        ];
+        this.client = [
+            {value:"BROWSER",text:"浏览器",mark:1},
+            {value:"ORIGINAL",text:"原生(自定义)",mark:2}
+        ];
+        this.deviceType = [
+            {value:"PC",text:"个人电脑",mark:1},
+            {value:"MOBILE",text:"手机",mark:2},
+            {value:"TABLET",text:"平板",mark:4}
+        ];
+        this.enumConfig = {
+            goodsState:this.goodsState,
+            os:this.os,
+            client:this.client,
+            deviceType:this.deviceType
+        };
     });
     //日期转化服务
     app.service("DateUtil",function () {
@@ -311,27 +354,16 @@ define(function (require) {
         };
 
         this.reset = function (entity) {
-            if(entity){
-                entity = {
-                    "page":1,
-                    "pageSize":10,
-                    "lock":false,
-                    "cols":[],
-                    "groupBys":[],
-                    "orderBys":[],
-                    "conditions":[]
-                };
-            }else{
-                this.searchEntity ={
-                    "page":1,
-                    "pageSize":10,
-                    "lock":false,
-                    "cols":[],
-                    "groupBys":[],
-                    "orderBys":[],
-                    "conditions":[]
-                };
-            }
+            var temp = entity?entity:this.searchEntity;
+            temp = {
+                "page":1,
+                "pageSize":10,
+                "lock":false,
+                "cols":[],
+                "groupBys":[],
+                "orderBys":[],
+                "conditions":[]
+            };
         };
 
         this.selectAll = function (entity) {

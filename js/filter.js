@@ -2,17 +2,22 @@ define(function(require) {
 	var app = require('./app');
 
     //枚举对象通用过滤器
-    app.filter("enumFilter",function (enums) {
+    app.filter("enumFilter",function (enums,$sce) {
         return function (value,name) {//value为需要被过滤的值,name表示枚举对象名
             var entity = enums.enumConfig[name];
             for(var index in entity){
                 if(value == entity[index].mark || value==entity[index].value){
-                    return entity[index].text;
+                    if(entity[index].color){
+                        return $sce.trustAsHtml("<span style='color: "+entity[index].color+"'>"+entity[index].text+"</span>");
+                    }else{
+                        return entity[index].text;
+                    }
                 }
 			}
             return value;
         }
     });
+
 
     //时间过滤展示
     app.filter("timeFilter",function(DateUtil){

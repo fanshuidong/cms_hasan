@@ -7,18 +7,18 @@ define(function (require) {
 
 
     //取消a标签的默认动作
-    app.directive('a', function() {
-        return {
-            restrict: 'E',
-            link: function(scope, elem, attrs) {
-                if (attrs.ngClick || attrs.href === '' || attrs.href === '#') {
-                    elem.on('click', function(e) {
-                        e.preventDefault(); // prevent link click for above criteria
-                    });
-                }
-            }
-        };
-    });
+    // app.directive('a', function() {
+    //     return {
+    //         restrict: 'E',
+    //         link: function(scope, elem, attrs) {
+    //             if (attrs.ngClick || attrs.href === '' || attrs.href === '#') {
+    //                 elem.on('click', function(e) {
+    //                     e.preventDefault(); // prevent link click for above criteria
+    //                 });
+    //             }
+    //         }
+    //     };
+    // });
     app.directive('showtab', function () {
             return {
                 link: function (scope, element, attrs) {

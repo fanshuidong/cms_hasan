@@ -156,7 +156,7 @@ body{
 .pageSidebarOne .page-sidebar-menu a:hover .icon1{
     background-color: #fcb95b;
 }
-.icon1_active{
+#icon1 .active{
     background-color: #fcb95b;
 }
 .icon2{
@@ -165,7 +165,7 @@ body{
 .pageSidebarOne .page-sidebar-menu a:hover .icon2{
     background-color: #F88962;
 }
-.icon2_active{
+#icon2 .active{
     background-color: #F88962;
 }
 .icon3{
@@ -174,7 +174,7 @@ body{
 .pageSidebarOne .page-sidebar-menu a:hover .icon3{
     background-color: #7F8DE1;
 }
-.icon3_active{
+#icon3 .active{
     background-color: #7F8DE1;
 }
 .icon4{
@@ -183,7 +183,7 @@ body{
 .pageSidebarOne .page-sidebar-menu a:hover .icon4{
     background-color: #A094ED;
 }
-.icon4_active{
+#icon4 .active{
     background-color: #A094ED;
 }
 .icon5{
@@ -192,7 +192,7 @@ body{
 .pageSidebarOne .page-sidebar-menu a:hover .icon5{
     background-color: #F49756;
 }
-.icon5_active{
+#icon5 .active{
     background-color: #F49756;
 }
 .icon6{
@@ -553,3 +553,9 @@ body{
 .myClock{font-size: 25px;}
 
 .heng{width:100%;height:1px;border:none;border-top:1px solid #e5e5e5;}
+
+.box{
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    margin-top: 10px;
+}

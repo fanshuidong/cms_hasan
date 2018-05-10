@@ -5,14 +5,19 @@ define(function (require) {
     var app = require('/../js/app');
     var $ = require('jquery');
     require('ui-table');
-    require('bootstrap-fileinput-zh');
-    require('bootstrap-fileinput');
-    // require('upload');
-    // app.useModule("ngFileUpload");
     app.useModule("ui.table");
     var datepicker = require('datepicker');
     var toastr =require('toastr');
-    app.controller('goodsListCtrl', ['$scope','$http','search',function ($scope, $http,search) {
+    require('bootstrap-fileinput-zh');
+    app.controller('goodsListCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
+        //获取商品图片上传类型
+        $http({
+            method: 'POST',
+            url:"hasan/resource/configs",
+            data:{ids:enums.goodsResource}
+        }).success(function(data) {
+            $scope.cfgGoodsResource=data.attach;
+        });
         datepicker($scope);
         $scope.selectOptions = {
             allowClear: false,
@@ -23,7 +28,7 @@ define(function (require) {
 
         $scope.query=function(reset){
             if(reset){
-                search.reset(goodsSearchEntity);
+                goodsSearchEntity = {"page":1,"pageSize":10}
             }
             $http({
                 method: 'POST',
@@ -44,27 +49,57 @@ define(function (require) {
         };
         //条件查询
         $scope.search=function(){
-            search.reset(goodsSearchEntity);
+            goodsSearchEntity = {"page":1,"pageSize":10};
             if($scope.name)
-                search.appendEquals("name",$scope.name,true,goodsSearchEntity);
+                goodsSearchEntity.name = $scope.name;
             // search.appendRange(false,false,Date.parse($scope.beginTime)/1000,Date.parse($scope.endTime)/1000,"created",goodsSearchEntity);
             $scope.query();
         };
         //全局查询重置
         $scope.reset=function(){
+            $scope.name = "";
             $scope.query(true);
         };
 
         //创建
         $scope.goods={};
         $scope.add=function(){
+            $("#goodsInfo").show();
+            $("#uploadPic").hide();
+            $("#goods").click();
             $scope.isAdd = true;
+            $scope.goodsResource=[];
             $scope.addGoodsModal = !$scope.addGoodsModal;
         };
         $scope.update = function (item) {
             $scope.isAdd = false;
+            $("#goodsInfo").show();
+            $("#uploadPic").show();
             $scope.goods = item;
-            $scope.goodsModal = !$scope.goodsModal;
+            $scope.addGoodsModal = !$scope.addGoodsModal;
+            $http({
+                method: 'POST',
+                url:"hasan/resource/list",
+                data:{cfgIds:enums.goodsResource,owner:$scope.goods.id}
+            }).success(function(data) {
+                $scope.goodsResource=data.attach.list;
+                $scope.initFileInput();
+            });
+        };
+
+        //上下架
+        $scope.offShelves = function (item) {
+            item.state = item.state=='SALE'?'OFF_SHELVES':'SALE';
+            $http({
+                method: 'POST',
+                url: "hasan/goods/modify",
+                data:item
+            }).success(function(data) {
+                if (data.code == "code.success") {
+                    toastr.success("提交成功！");
+                    $scope.query();
+                }
+            });
         };
 
         $scope.submit = function () {
@@ -75,10 +110,14 @@ define(function (require) {
             }).success(function(data) {
                 if (data.code == "code.success") {
                     toastr.success("提交成功！");
+                    $scope.goods.id = data.attach;
                     $scope.query();
-                    $("#goodsInfo").hide();
-                    $("#uploadPic").show();
-                    $("#picTab").click();
+                    if($scope.isAdd){
+                        $("#goodsInfo").hide();
+                        $("#uploadPic").show();
+                        $("#picTab").click();
+                        $scope.initFileInput();
+                    }
                 }
             });
         };
@@ -99,38 +138,57 @@ define(function (require) {
         };
         //初始化图片上传插件
         $scope.initFileInput = function () {
-            $scope.fileInput("icon");
+            for(var i= 0 ; i<$scope.cfgGoodsResource.length; i++){
+                var initialPreviewConfig = [];
+                var initialPreview = [];
+                if($scope.goodsResource){//编辑有初始化图片
+                    for(var index in $scope.goodsResource){
+                        if($scope.goodsResource[index].cfgId == $scope.cfgGoodsResource[i].id){
+                            initialPreviewConfig.push({
+                                caption:$scope.goodsResource[index].name,
+                                key:'http://172.16.20.93:8089/hasan/resource/deleteByAjax',
+                                extra:{id:$scope.goodsResource[index].id}
+
+                            });
+                            initialPreview.push($scope.goodsResource[index].url);
+                        }
+                    }
+                }
+                $scope.fileInput($scope.cfgGoodsResource[i].id,$scope.cfgGoodsResource[i].maxinum,$scope.cfgGoodsResource[i].cacheSize*1024
+                                 ,initialPreview,initialPreviewConfig);
+            }
         };
-        $scope.fileInput = function (id){
+        $scope.fileInput = function (id,maxinum,size,initialPreview,initialPreviewConfig){
             $("#"+id).fileinput('destroy');
             $("#"+id).fileinput({
                 language: 'zh', //设置语言
                 uploadUrl: 'http://172.16.20.93:8089/hasan/resource/upload', // you must set a valid URL here else you will get an error
-                // uploadExtraData:function(previewId, index) {   //额外参数的关键点
-                //     var name = $("#"+previewId).find(".file-footer-caption").attr("title").split('.')[0];
-                //     return {
-                //         name:name,
-                //         cfgResourceId:1
-                //     }
-                // },
-                uploadExtraData:{name:"test",cfgResourceId:2},
+                uploadExtraData:function(previewId, index) {   //额外参数的关键点
+                    var name = $("#"+previewId).find(".file-footer-caption").attr("title");
+                    if(name){
+                        return {
+                            name:name.split(".")[0],
+                            priority:index,
+                            cfgResourceId:id,
+                            owner:$scope.goods.id
+                        }
+                    }
+                },
                 enctype: 'multipart/form-data',// 上传图片的设置
                 allowedFileExtensions : ['jpg', 'png','gif'],
                 showUpload: false, //是否显示上传按钮
                 showRemove:false, // 是否显示移除按钮
-                maxFileSize: 2000,
-                maxFileCount: 5,
+                maxFileSize: size,
+                maxFileCount: maxinum,
+                overwriteInitial: false, //不覆盖已存在的图片
                 // layoutTemplates: {
                 //     actions: ''
                 // },//显示的图片布局模版
-                msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
                 initialPreviewAsData: true,
                 initialPreviewFileType: 'image',
-                initialPreview: [$scope.img],
-                initialPreviewConfig: [{
-                    url: '',// 预展示图片的删除调取路径
-                    extra: {id: 100} //调用删除路径所传参数
-                }]
+                initialPreview: initialPreview,
+                initialPreviewConfig: initialPreviewConfig
             });
             $("#"+id).on("fileuploaded", function (event, data, previewId, index) {
                 console.log(data);
@@ -148,8 +206,9 @@ define(function (require) {
                         });
                     });
                 }else{
-                    $(".file-error-message").show();
-                    $(".file-error-message").text(data.response.desc);
+                    toastr.error(data.response.desc);
+                    // $(".file-error-message").show();
+                    // $(".file-error-message").text(data.response.desc);
                     $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("glyphicon-ok-sign");
                     $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("text-success");
                     $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("glyphicon-exclamation-sign");
@@ -158,27 +217,5 @@ define(function (require) {
                 }
             });
         };
-        $scope.fileChange = function (file) {
-            $scope.files = file.files;
-            $scope.$apply(); //传播Model的变化。
-        };
-        
-        $scope.uploadResource = function () {
-            var form = new FormData();
-            form.append("resource",$('#icon').files[0]);
-            form.append("name", $('#rName').val());
-            form.append("priority", $('#rPriority').val());
-            $http({
-                method:'POST',
-                url:"hasan/resource/upload",
-                data: form,
-                headers: {'Content-Type':undefined}
-            }).success(function (data) {
-                if(data.code==0){
-                    toastr.success("上传成功！");
-                }
-            });
-        }
-
     }]);
 });

@@ -16,15 +16,22 @@ define(function (require) {
                         if(!$rootScope.response)
                             $('.landmark').addClass('landmark-block');
                     }, 500);
+                    // setTimeout(function(){
+                    //     if(!$rootScope.response){
+                    //         $('.landmark').removeClass('landmark-block');
+                    //         toastr.error("服务器异常，请稍后再试");
+                    //     }
+                    // }, 10000);
                     config.url = Url.hasan[window.localStorage.getItem("h_apiUrl")]+config.url;
-                    config.data.client = "BROWSER";
-                    config.data.usernameType = "MOBILE";
-                    config.data.deviceType = "PC";
-                    config.data.os = "WINDOWS";
+                    // config.data.client = "BROWSER";
+                    // config.data.usernameType = "MOBILE";
+                    // config.data.deviceType = "PC";
+                    // config.data.os = "WINDOWS";
                 }
                 return config;
             },
             requestError:function(config){
+                $rootScope.response = true;
                 return $q.reject(config);
             },
             response : function(response){

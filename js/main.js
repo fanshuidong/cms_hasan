@@ -25,7 +25,8 @@ require.config({
         'bootstrap-fileinput-zh':'lib/bootstrap-fileinput/js/locales/zh',
         'bootstrap-fileinput':'lib/bootstrap-fileinput/js/fileinput',
         'bootstrap-switch':'lib/bootstrap-switch-master/dist/js/bootstrap-switch.min',
-        'ztree':'lib/ztree/js/jquery.ztree.all.min'
+        'ztree':'lib/ztree/js/jquery.ztree.all.min',
+        'multiselect':'lib/multiselect/jquery.multiselect'
     },
     shim: {
         'angular': {deps: ['jquery'],exports: 'angular'},

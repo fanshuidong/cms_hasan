@@ -5,13 +5,12 @@ define(function (require) {
     var app = require('/../js/app');
     require('ui-table');
     require('ztree');
+    require('multiselect');
     var toastr =require('toastr');
     app.useModule("ui.table");
-    app.controller('resourceCtrl', ['$scope','$http','search',function ($scope, $http,search) {
+    app.controller('resourceCtrl', ['$scope','$http',function ($scope, $http) {
         $scope.setting = {
             view: {
-                // addHoverDom: addHoverDom,
-                // removeHoverDom: removeHoverDom,
                 selectedMulti: false
             },
             check: {
@@ -19,12 +18,12 @@ define(function (require) {
             },
             data: {
                 key:{
-                    name:"resourceName"
+                    name:"name"
                 },
                 simpleData: {
                     enable: true,
                     idKey:"id",
-                    pIdKey:"parentId"
+                    pIdKey:"parent"
                 }
             },
             edit: {
@@ -48,10 +47,10 @@ define(function (require) {
                         ids.push(treeNode.children[i].id);
                 $http({
                     method: 'POST',
-                    url: "manager/resource/delete",
+                    url: "hasan/authority/modular/delete",
                     data:{ids:ids}
                 }).success(function (data) {
-                    if(data.code == 0){
+                    if(data.code == 'code.success'){
                         toastr.success("删除成功");
                         return true;
                     }else{
@@ -65,20 +64,18 @@ define(function (require) {
 
         //获取后台栏目列表
         var resources = [];
-        var resourceEntity = search.newEntity();
-        search.appendOrder("resource_sort","true",resourceEntity);
         $http({
             method: 'POST',
-            url: "manager/resource/list",
-            data:resourceEntity
+            url: "hasan/authority/modular/list",
+            data:{}
         }).success(function (data) {
             console.log(data);
-            if(data.code == 0){
+            if(data.code == 'code.success'){
                 for(var i = 0;i<data.attach.length;i++){
                     var resource = data.attach[i];
-                    if(resource.parentId == 0){
-                        resource.isParent = true;
-                    }
+                    // if(resource.parent == 0){
+                    //     resource.isParent = true;
+                    // }
                     resources.push(resource);
                 }
                 $(document).ready(function () {
@@ -90,34 +87,36 @@ define(function (require) {
         function zTreeOnClick(event,treeId,treeNode) {
             selectedNode = {
                 id:treeNode.id,
-                resourceCode:treeNode.resourceCode,
-                resourceName:treeNode.resourceName,
-                resourceType:treeNode.resourceType,
-                resourceUrl:treeNode.resourceUrl,
-                parentId:treeNode.parentId==null?0:treeNode.parentId,
-                resourceSort:treeNode.resourceSort
+                name:treeNode.name,
+                url:treeNode.url,
+                priority:treeNode.priority,
+                parent:treeNode.parent==null?0:treeNode.parent,
+                css:treeNode.css
             };
             $("#id").val(selectedNode.id);
-            $("#resourceName").val(selectedNode.resourceName);
-            $("#parentId").val(selectedNode.parentId);
-            $("#resourceUrl").val(selectedNode.resourceUrl);
-            $("#resourceSort").val(selectedNode.resourceSort);
+            $("#name").val(selectedNode.name);
+            $("#url").val(selectedNode.url);
+            $("#priority").val(selectedNode.priority);
+            $("#parent").val(selectedNode.parent);
+            $("#css").val(selectedNode.css);
             $("#resource").show();
+            $scope.apiAuthInit(treeNode);
         }
 
         //提交修改
         $scope.resourceModify = function(){
-            selectedNode.resourceName = $("#resourceName").val();
-            selectedNode.parentId = $("#parentId").val();
-            selectedNode.resourceUrl = $("#resourceUrl").val();
-            selectedNode.resourceSort = $("#resourceSort").val();
+            selectedNode.name = $("#name").val();
+            selectedNode.parent = $("#parent").val();
+            selectedNode.url = $("#url").val();
+            selectedNode.priority = $("#priority").val();
+            selectedNode.css = $("#css").val();
             $http({
                 method: 'POST',
-                url: "manager/resource/modify",
+                url: "hasan/authority/modular/modify",
                 data: selectedNode
             }).success(function(data) {
                 console.log(data);
-                if(data.code==0){
+                if(data.code=='code.success'){
                     toastr.success("提交成功");
                     window.location.reload();
                 }
@@ -128,18 +127,73 @@ define(function (require) {
         };
         $scope.add = {};
         $scope.resourceAddSubmit = function () {
-            $scope.add.resourceCode = $scope.add.resourceUrl;
-            $scope.add.resourceType = 1;
             $http({
                 method: 'POST',
-                url: "manager/resource/modify",
+                url: "hasan/authority/modular/add",
                 data: $scope.add
             }).success(function(data) {
                 console.log(data);
-                if(data.code==0){
+                if(data.code=='code.success'){
                     toastr.success("提交成功");
                     window.location.reload();
                 }
+            });
+        };
+        /***********multiselect 模块开始************/
+        $scope.leftApiList = [];
+        var sid="";
+        $scope.apiAuthInit = function(treeNode) {
+            $http({
+                method: 'POST',
+                url: "hasan/authority/api/list",
+                data:{}
+            }).success(function (data) {
+                $scope.leftApiList=data.attach.list;
+            });
+            sid = treeNode.id;
+            $("#apiAuth").show();
+            $scope.$apply(function () {
+                $scope.authResource = treeNode.name;
+                //获取模块API操作权限
+                $http({
+                    method: 'POST',
+                    url: "hasan/authority/api/list/modular",
+                    data:{id:sid}
+                }).success(function (data) {
+                    $scope.rightApiList=data.attach.list;
+                    for(var i=0;i<$scope.leftApiList.length;i++){
+                        for(var j=0;j<$scope.rightApiList.length;j++){
+                            if($scope.rightApiList[j].id == $scope.leftApiList[i].id){
+                                $scope.leftApiList.splice(i,1);
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+        };
+        $('#multiselect1').multiselect({
+            keepRenderingSort: true,
+            afterMoveToRight:function ($left, $right, $options) {
+                $scope.apiAuth($right);
+            },
+            afterMoveToLeft:function ($left, $right, $options) {
+                $scope.apiAuth($right);
+            }
+        });
+        //分配权限
+        $scope.apiAuth = function ($right) {
+            var tid = [];
+            for(var i = 0;i<$right[0].children.length;i++){
+                tid.push(Number($right[0].children[i].value));
+            }
+            $http({
+                method: 'POST',
+                async:false,
+                url: "hasan/authority/auth/modular",
+                data:{sid:sid,tid:tid}
+            }).success(function (data) {
             });
         }
     }]);

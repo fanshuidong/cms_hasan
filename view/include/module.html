@@ -1,0 +1,30 @@
+<!-- BEGIN PAGE SPINNER -->
+<div class="top-nav">
+    <div class="flower"></div>
+    <div class="searchBox">
+        <!--<input type="text" placeholder="搜索">-->
+    </div>
+</div>
+<!-- END HEADER -->
+<div class="clearfix">
+</div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <div  data-ng-controller="SidebarController">
+        <div  class="page-sidebar2-menu" >
+            <a  ng-repeat="item in resourceMapping[key] " ui-sref=".{{item.url}}" ng-class="{active2:path.indexOf('{{item.url}}')!=-1}"
+                data-ng-click="setPath(item.url)">
+                {{item.name}}
+            </a>
+        </div>
+    </div>
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+
+            <div ui-view class="fade-in-up2">
+
+            </div>
+        </div>
+    </div>
+</div>

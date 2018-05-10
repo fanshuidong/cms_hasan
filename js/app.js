@@ -6,8 +6,7 @@ define(function (require, exports, module) {
     require('ui-bootstrap');
     require('sanitize');
     require('angular-select2');
-
-
+    require('bootstrap-fileinput');
     var app = angular.module('app', ['ui.router','ui.bootstrap','ngSanitize','ui.select2']);
 
     asyncLoader.configure(app);
