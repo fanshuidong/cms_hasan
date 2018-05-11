@@ -1,0 +1,217 @@
+<div class="tableToolbar">
+    <div class="coll-md-9" id="addInput">
+        <div class="coll-md-2">
+            <input type="text" class='search' placeholder="菜谱名称" ng-model="cookbookSearchEntity.name">
+        </div>
+        <!--<div class="coll-md-4 scalenone"  id="searchdate" datahide>-->
+            <!--<div class="coll-md-5" >-->
+                <!--<p class="input-group">-->
+                    <!--<input type="text" class="search" placeholder="添加开始时间" uib-datepicker-popup="yyyy-MM-dd"-->
+                           <!--ng-model="beginTime" is-open="popup1.opened" datepicker-options="dateOptions"/>-->
+                    <!--<span class="input-group-btn">-->
+							            <!--<button type="button" class="small-icon btn btn-default" ng-click="open1()"><i-->
+                                                <!--class="glyphicon glyphicon-calendar"></i></button>-->
+							          <!--</span>-->
+                <!--</p>-->
+            <!--</div>-->
+            <!--<div class="coll-md-5">-->
+                <!--<p class="input-group inline">-->
+                    <!--<input type="text" class="search" placeholder="添加结束时间" uib-datepicker-popup="yyyy-MM-dd"-->
+                           <!--ng-model="endTime" is-open="popup2.opened" datepicker-options="dateOptions"/>-->
+                    <!--<span class="input-group-btn">-->
+							            <!--<button type="button" class="small-icon btn btn-default" ng-click="open2()"><i-->
+                                                <!--class="glyphicon glyphicon-calendar"></i></button>-->
+							          <!--</span>-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="coll-md-1">
+            <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search()">
+            <input type="button" class="small-icon search2" value="搜索">
+            <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="reset()">
+            <input type="button" class="small-icon reset" value="重置">
+
+            <!--<div class="dropdown-menu-right">-->
+                <!--<input type="button" class="small-icon more-icon" value="更多" title='更多搜索项' id="more-icon" data-toggle="dropdown"-->
+                       <!--aria-haspopup="true" aria-expanded="false">-->
+                <!--<input type="button" class="small-icon more" value="更多">-->
+                <!--<ul class="dropdown-menu" style='margin-left:80px;' aria-labelledby="dropdownMenu2" more-search>-->
+                    <!--<li><a href="javascript:;">日期搜索</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="coll-md-1">
+        <input type="button" class="bttn pos-right"  ng-click="add()" value="新建">
+    </div>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>菜谱编号</th>
+        <th>菜谱名称</th>
+        <!--<th>菜谱表单</th>-->
+        <th>添加时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in cookbookList">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <!--<td><a ng-click="lookText(item.text)">查看</a></td>-->
+        <td>{{item.created | timeFilter}}</td>
+        <td>
+            <a ng-click="update(item)">编辑</a>
+            <a ng-click="delete(item.id)">删除</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize">
+<uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages()"></uib-pagination>
+</div>
+
+<!--新建弹窗-->
+<modal title="添加菜谱" visible="cookbookModal">
+    <form class="form-horizontal" role="form" name="myForm" ng-submit="submit(myForm.$valid)" >
+        <div class="form-body">
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active" id="cookbookInfo"><a  href="#item1" data-toggle="tab" id="cookbook">菜谱基础属性</a></li>
+                <li id="uploadPic" style="display: none"><a href="#item2" data-toggle="tab" id="picTab">{{cookbook.name}}_coo图片上传</a></li>
+            </ul>
+            <div class="tab-content" style="margin-top:10px;">
+                <!--菜谱基础属性-->
+                <div class="tab-pane fade in active" id="item1">
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">菜谱名称:<strong class="error" ng-if="myForm.name.$invalid">&nbsp;(必填)</strong></label>
+                                <div class="col-md-8">
+                                    <input  type="text" class="form-control" data-ng-model="cookbook.name" name="name" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">菜谱食品:</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" required ui-select2 ng-model="text.goods" multiple>
+                                        <option ng-repeat="item in goodsList" value="{{item.id}}">{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="float: right;margin-right: 10px">
+                        <button type="button" class="btn btn-default btn-sm" title="添加食材分类" data-ng-click="addCuisineType()">
+                            <span class="glyphicon glyphicon-plus">添加食材分类</span>
+                        </button>
+                    </div>
+
+                    <div class="row" style="margin-top: 30px;">
+                        <div data-ng-repeat="item in cookbook.cuisineGroups" style="background-color:#E7E7E7;margin-top: 20px;overflow: auto;padding: 5px">
+                            <div style="float: right;">
+                                <button type="button" class="btn btn-default btn-sm" title="删除食材分类" data-ng-click="deleteCuisineType($index)">
+                                    <span class="glyphicon glyphicon glyphicon-trash"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 20px">
+                                <div class="form-group">
+                                    <label  class="control-label col-md-2">分类名称:</label>
+                                    <div class="col-md-3">
+                                        <input  type="text" class="form-control" data-ng-model="item.name" required/>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div style="float: right;margin-right: 10px">
+                                            <button type="button" class="btn btn-default btn-sm" title="添加食材" data-ng-click="addCuisine($index)">
+                                                <span class="glyphicon glyphicon-plus">添加食材</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12" data-ng-repeat="item2 in item.cuisines">
+                                <div class="form-group">
+                                    <label  class="control-label col-md-2">食材名称:</label>
+                                    <div class="col-md-3">
+                                        <input  type="text" class="form-control" data-ng-model="item2.name" name="cuisineName" required/>
+                                    </div>
+                                    <label  class="control-label col-md-2">食材剂量:</label>
+                                    <div class="col-md-3">
+                                        <input  type="text" class="form-control" data-ng-model="item2.dosage" name="dosage" required/>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-default btn-sm" title="删除食材" data-ng-click="deleteCuisine($parent.$index,$index)">
+                                            <span class="glyphicon glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--食材 结束-->
+                        <div class="buttonArea col-md-12" style="border:none">
+                            <button type="submit" class="btn blue" ng-disabled="myForm.$invalid" ng-if="isAdd">下一步</button>
+                            <button type="submit" class="btn blue" ng-disabled="myForm.$invalid" ng-if="!isAdd">提交</button>
+                        </div>
+                    </div>
+                </div>
+                <!--图片上传-->
+                <div class="tab-pane fade" id="item2" >
+                    <div class="col-md-12" data-ng-repeat-start="item in cfgGoodsResource" style="margin: 20px 0;font-size: 18px;background: #efeff5;padding: 10px 0">
+                        <strong>{{item.name}} <span style="color: red">最多上传{{item.maximum}}张图片</span></strong>
+                    </div>
+                    <div class="row" data-ng-repeat-end>
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input id="{{item.id}}" name="source" type="file" multiple/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>
+<!--添加菜肴-->
+<modal title="添加菜肴" visible="cuisineGroupsModal">
+    <form class="form-horizontal" role="form" name="myForm" ng-submit="submitCuisine(myForm.$valid)" >
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label  class="control-label col-md-4">分类:<strong class="error" ng-if="myForm.name.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-8">
+                            <input  type="text" class="form-control" data-ng-model="cuisineGroup.name" name="name" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label  class="control-label col-md-4">名称:<strong class="error" ng-if="myForm.cuisineName.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-8">
+                            <input  type="text" class="form-control" data-ng-model="cuisine.name" name="cuisineName" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label  class="control-label col-md-4">剂量:<strong class="error" ng-if="myForm.dosage.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-8">
+                            <input  type="text" class="form-control" data-ng-model="cuisine.dosage" name="dosage" required/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttonArea col-md-12" style="border:none">
+                    <button type="submit" class="btn blue" ng-disabled="myForm.$invalid">提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>
+

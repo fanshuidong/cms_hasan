@@ -26,7 +26,8 @@ require.config({
         'bootstrap-fileinput':'lib/bootstrap-fileinput/js/fileinput',
         'bootstrap-switch':'lib/bootstrap-switch-master/dist/js/bootstrap-switch.min',
         'ztree':'lib/ztree/js/jquery.ztree.all.min',
-        'multiselect':'lib/multiselect/jquery.multiselect'
+        'multiselect':'lib/multiselect/jquery.multiselect',
+        'bootbox':'lib/bootbox.min'
     },
     shim: {
         'angular': {deps: ['jquery'],exports: 'angular'},
@@ -39,6 +40,7 @@ require.config({
         'angular-ueditor':{deps: ['angular','ueditor.all.min']},
         'angular-select2':{deps: ['angular','select2'],exports : 'uiSelect2'},
         'toastr':{exports:'toastr'},
+        'bootbox':{exports:'bootbox'},
         'upload':{deps: ['angular','upload-shim'],exports : 'Upload'},
         'highchartng':{deps: ['angular','highchart']},
         'angular-datepicker':{deps: ['angular'],exports:'datePicker'}

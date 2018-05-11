@@ -23,7 +23,6 @@ html{font-family: '微软雅黑'!important;
     -webkit-tap-highlight-color: transparent;
     height:100%;width:100%;position: relative;}
 
-.clear { zoom:1; }
 .clear:after { content:''; display:block; clear:both; }
 
 *:after,*:before{box-sizing: border-box}

@@ -146,6 +146,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/goods/goodsListCtrl.js',
                 controller: "goodsListCtrl"
             })
+            .state("goods.cookbook", {
+                url: "/cookbook",
+                templateUrl: "view/goods/cookbook.html",
+                controllerUrl: 'viewjs/goods/cookbookCtrl.js',
+                controller: "cookbookCtrl"
+            })
             //用户管理
             .state("user", {
                 url: "/user",
@@ -214,7 +220,8 @@ define(function (require) {
     });
     //定义枚举实体
     app.service('enums',function () {
-        this.goodsResource = [1000,1001,1002,1003];
+        this.goodsResource = [1000,1001,1002];
+        this.cookbookResource = [1010,1011];
 
         this.goodsState = [
             {value:"SALE",text:"出售中",mark:1,color:"green"},
@@ -251,6 +258,10 @@ define(function (require) {
             deviceType:this.deviceType,
             orderState:this.orderState
         };
+        this.cuisineType = [
+            {value:"主料",text:"主料",mark:1},
+            {value:"辅料",text:"辅料",mark:2}
+        ]
     });
     //日期转化服务
     app.service("DateUtil",function () {
