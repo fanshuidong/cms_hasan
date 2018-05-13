@@ -10,8 +10,17 @@ define(function (require) {
     var toastr =require('toastr');
     var bootbox =require('bootbox');
     require('bootstrap-fileinput-zh');
-    app.controller('cookbookCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
+    app.controller('cookbookCtrl', ['$scope','$http','search','enums','Url',function ($scope, $http,search,enums,Url) {
+        var httpUrl = Url.hasan[window.localStorage.getItem("h_apiUrl")];
         $scope.cuisineType = enums.cuisineType;
+        //获取菜谱图片上传类型
+        $http({
+            method: 'POST',
+            url:"hasan/resource/configs",
+            data:{ids:enums.cookbookResource}
+        }).success(function(data) {
+            $scope.cfgCookbookResource=data.attach;
+        });
         //获取商品列表
         $http({
             method: 'POST',
@@ -49,7 +58,7 @@ define(function (require) {
 
         // 切换页码时
         $scope.changePages=function(){
-            cookbookSearchEntity.query.page=$scope.page;
+            $scope.cookbookSearchEntity.page=$scope.page;
             $scope.query();
         };
         //条件查询
@@ -79,7 +88,9 @@ define(function (require) {
             $scope.isAdd = false;
             $("#cookbookInfo").show();
             $("#uploadPic").show();
-            $scope.cookbook = item;
+            $scope.cookbook = {
+                id:item.id,name:item.name,goods:JSON.parse(item.text).goods,cuisineGroups:JSON.parse(item.text).cuisineGroups
+            };
             $scope.cookbookModal = !$scope.cookbookModal;
             $http({
                 method: 'POST',
@@ -117,7 +128,7 @@ define(function (require) {
             if(confirm("确认要删除吗？")) {
                 $http({
                     method: 'POST',
-                    url: "hasan/goods/delete",
+                    url: "hasan/cookbook/delete",
                     data: {id: id}
                 }).success(function (data) {
                     if (data.code == "code.success") {
@@ -150,16 +161,16 @@ define(function (require) {
             for(var i= 0 ; i<$scope.cfgCookbookResource.length; i++){
                 var initialPreviewConfig = [];
                 var initialPreview = [];
-                if($scope.goodsResource){//编辑有初始化图片
-                    for(var index in $scope.goodsResource){
+                if($scope.cookbookResource){//编辑有初始化图片
+                    for(var index in $scope.cookbookResource){
                         if($scope.cookbookResource[index].cfgId == $scope.cfgCookbookResource[i].id){
                             initialPreviewConfig.push({
-                                caption:$scope.goodsResource[index].name,
-                                key:'http://172.16.20.93:8089/hasan/resource/deleteByAjax',
-                                extra:{id:$scope.goodsResource[index].id}
+                                caption:$scope.cookbookResource[index].name,
+                                key:httpUrl+'hasan/resource/deleteByAjax',
+                                extra:{id:$scope.cookbookResource[index].id}
 
                             });
-                            initialPreview.push($scope.goodsResource[index].url);
+                            initialPreview.push($scope.cookbookResource[index].url);
                         }
                     }
                 }
@@ -171,7 +182,7 @@ define(function (require) {
             $("#"+id).fileinput('destroy');
             $("#"+id).fileinput({
                 language: 'zh', //设置语言
-                uploadUrl: 'http://172.16.20.93:8089/hasan/resource/upload', // you must set a valid URL here else you will get an error
+                uploadUrl: httpUrl+'hasan/resource/upload', // you must set a valid URL here else you will get an error
                 uploadExtraData:function(previewId, index) {   //额外参数的关键点
                     var name = $("#"+previewId).find(".file-footer-caption").attr("title");
                     if(name){

@@ -104,6 +104,16 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label  class="control-label col-md-4">选择菜谱:</label>
+                                <div class="col-md-8">
+                                    <select  class="form-control" name="cookbook" data-ng-model="goods.cookbookId" >
+                                        <option value="{{item.id}}" data-ng-repeat="item in cookbooks">{{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label  class="control-label col-md-4">排序号:<strong class="error" ng-if="myForm.priority.$invalid">&nbsp;(必填)</strong></label>
                                 <div class="col-md-8">
                                     <input  type="number" class="form-control" data-ng-model="goods.priority" name="priority" required/>

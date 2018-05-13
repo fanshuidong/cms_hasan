@@ -10,6 +10,14 @@ define(function (require) {
     var toastr =require('toastr');
     require('bootstrap-fileinput-zh');
     app.controller('goodsListCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
+        //获取菜谱列表
+        $http({
+            method: 'POST',
+            url:"hasan/cookbook/list",
+            data:{page:1,pageSize:1000}
+        }).success(function(data) {
+            $scope.cookbooks=data.attach.list;
+        });
         //获取商品图片上传类型
         $http({
             method: 'POST',
