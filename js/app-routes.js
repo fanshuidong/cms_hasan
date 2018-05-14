@@ -233,6 +233,10 @@ define(function (require) {
             {value:"SALE",text:"出售中",mark:1,color:"green"},
             {value:"OFF_SHELVES",text:"下架",mark:2,color:"red"}
         ];
+        this.memberState = [
+            {value:true,text:"出售中",mark:1,color:"green"},
+            {value:false,text:"下架",mark:2,color:"red"}
+        ];
         this.os = [
             {value:"IOS",text:"苹果",mark:1},
             {value:"ANDROID",text:"安卓",mark:2},
@@ -257,17 +261,37 @@ define(function (require) {
             {value:"RECEIVED",text:"待评价",mark:5},
             {value:"FINISH",text:"已完结",mark:6}
         ];
+        this.timeUnit = [
+            {value:"SECOND",text:"秒",mark:1},
+            {value:"MINUTE",text:"分",mark:2},
+            {value:"HOUR",text:"小时",mark:3},
+            {value:"DAY",text:"天",mark:4},
+            {value:"WEEK",text:"周",mark:5},
+            {value:"MONTH",text:"月",mark:6},
+            {value:"SEASON",text:"季度",mark:7},
+            {value:"YEAR",text:"年",mark:8}
+        ]
         this.enumConfig = {
             goodsState:this.goodsState,
+            memberState:this.memberState,
             os:this.os,
             client:this.client,
             deviceType:this.deviceType,
-            orderState:this.orderState
+            orderState:this.orderState,
+            timeUnit:this.timeUnit
         };
         this.cuisineType = [
             {value:"主料",text:"主料",mark:1},
             {value:"辅料",text:"辅料",mark:2}
         ]
+
+        this.getEntity = function (key,value) {
+            var entity = this.enumConfig[key];
+            for(var i =0 ;i<entity.length;i++){
+                if(entity[i].value == value || entity[i].mark == value)
+                    return entity[i];
+            }
+        }
     });
     //日期转化服务
     app.service("DateUtil",function () {
