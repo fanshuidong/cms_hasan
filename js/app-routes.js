@@ -209,6 +209,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/configCtrl.js',
                 controller: "configCtrl"
             })
+            .state("system.member", {
+                url: "/member",
+                templateUrl: "view/system/member.html",
+                controllerUrl: 'viewjs/system/memberCtrl.js',
+                controller: "memberCtrl"
+            })
     }]);
 
     app.service("Url",function(){
