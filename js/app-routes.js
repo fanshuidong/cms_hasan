@@ -215,11 +215,17 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/memberCtrl.js',
                 controller: "memberCtrl"
             })
+            .state("system.districts", {
+                url: "/districts",
+                templateUrl: "view/system/districts.html",
+                controllerUrl: 'viewjs/system/districtsCtrl.js',
+                controller: "districtsCtrl"
+            })
     }]);
 
     app.service("Url",function(){
         this.hasan = {
-            zxlUrl:"http://172.16.20.92:8080/",
+            zxlUrl:"http://172.16.20.42:8080/",
             fsdUrl:"http://localhost:8089/",
             online:"http://121.196.193.96/"
         };

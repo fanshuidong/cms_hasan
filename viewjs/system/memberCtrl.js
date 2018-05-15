@@ -45,7 +45,8 @@ define(function (require) {
         $scope.update=function(item){
             $scope.isEdit = true;
             $scope.memberModal = !$scope.memberModal;
-            $scope.member = item;
+            for(i in item)
+                $scope.member[i] = item[i];
             $scope.member.sale = String($scope.member.sale);
             $scope.member.timeUnit = enums.getEntity("timeUnit",$scope.member.timeUnit).value;
         };

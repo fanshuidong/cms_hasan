@@ -11,6 +11,7 @@ define(function (require) {
     require('bootstrap-fileinput-zh');
     app.controller('goodsListCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
         //获取菜谱列表
+        $scope.goodsState = enums.goodsState;
         $http({
             method: 'POST',
             url:"hasan/cookbook/list",
@@ -71,6 +72,17 @@ define(function (require) {
 
         //创建
         $scope.goods={};
+        //获取会员列表
+        $http({
+            method: 'POST',
+            url:"hasan/common/members",
+            data:{sale:true}
+        }).success(function(data) {
+            $scope.members=data.attach.list;
+            for(var i in $scope.members){
+                $scope.members[i].price = "";
+            }
+        });
         $scope.add=function(){
             $("#goodsInfo").show();
             $("#uploadPic").hide();
@@ -83,14 +95,23 @@ define(function (require) {
             $scope.isAdd = false;
             $("#goodsInfo").show();
             $("#uploadPic").show();
-            $scope.goods = item;
             $scope.addGoodsModal = !$scope.addGoodsModal;
             $http({
                 method: 'POST',
-                url:"hasan/resource/list",
-                data:{cfgIds:enums.goodsResource,owner:$scope.goods.id}
+                url:"hasan/goods/detail",
+                data:{id:item.id}
             }).success(function(data) {
-                $scope.goodsResource=data.attach.list;
+                $scope.goods ={
+                    id:data.attach.id,
+                    name:data.attach.name,
+                    cookbookId:data.attach.cookbookId,
+                    priority:data.attach.priority,
+                    desc:data.attach.desc,
+                    state:data.attach.state,
+                    inventory:data.attach.inventory
+                };
+                $scope.members = data.attach.prices;
+                $scope.goodsResource=data.attach.resources;
                 $scope.initFileInput();
             });
         };
@@ -111,6 +132,13 @@ define(function (require) {
         };
 
         $scope.submit = function () {
+            $scope.goods.prices = {};
+            for(var i = 0 ; i<$scope.members.length;i++){
+                if($scope.isAdd)
+                    $scope.goods.prices[$scope.members[i].id] = $scope.members[i].price;
+                else
+                    $scope.goods.prices[$scope.members[i].memberId] = $scope.members[i].price;
+            }
             $http({
                 method: 'POST',
                 url: $scope.isAdd?"hasan/goods/add":"hasan/goods/modify",
@@ -150,15 +178,18 @@ define(function (require) {
                 var initialPreviewConfig = [];
                 var initialPreview = [];
                 if($scope.goodsResource){//编辑有初始化图片
-                    for(var index in $scope.goodsResource){
-                        if($scope.goodsResource[index].cfgId == $scope.cfgGoodsResource[i].id){
-                            initialPreviewConfig.push({
-                                caption:$scope.goodsResource[index].name,
-                                key:'http://172.16.20.93:8089/hasan/resource/deleteByAjax',
-                                extra:{id:$scope.goodsResource[index].id}
+                    for(var key in $scope.goodsResource){
+                        if(key == $scope.cfgGoodsResource[i].id){
+                            for(var j = 0;j<$scope.goodsResource[key].length;j++){
+                                initialPreviewConfig.push({
+                                    caption:$scope.goodsResource[key][j].name,
+                                    key:'http://172.16.20.93:8089/hasan/resource/deleteByAjax',
+                                    extra:{id:$scope.goodsResource[key][j].id}
 
-                            });
-                            initialPreview.push($scope.goodsResource[index].url);
+                                });
+                                initialPreview.push($scope.goodsResource[key][j].url);
+                            }
+                            break;
                         }
                     }
                 }
