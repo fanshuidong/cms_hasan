@@ -180,6 +180,17 @@ define(function (require) {
                 controllerUrl: 'viewjs/message/pushCtrl.js',
                 controller: "pushCtrl"
             })
+            //图片管理
+            .state("picture", {
+                url: "/picture",
+                templateUrl: "view/include/module.html"
+            })
+            .state("picture.banner", {
+                url: "/banner",
+                templateUrl: "view/picture/banner.html",
+                controllerUrl: 'viewjs/picture/bannerCtrl.js',
+                controller: "bannerCtrl"
+            })
             //系统配置
             .state("system", {
                 url: "/system",
@@ -235,6 +246,20 @@ define(function (require) {
         this.goodsResource = [1000,1001,1002];
         this.cookbookResource = [1010,1011];
 
+        this.cfgResource = [
+            {mark:1,text:"轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"banner",type:1},
+            {mark:50,text:"用户头像",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"avatar",type:2},
+            {mark:100,text:"链接",minimun:0,maximum:0,cache_size:5,cache_unit:"MB",directory:"link",type:1},
+            {mark:1000,text:"商品icon",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/icon",type:3},
+            {mark:1001,text:"商品轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"goods/image",type:3},
+            {mark:1002,text:"商家名菜",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/dish",type:3},
+            {mark:1010,text:"菜谱ICON",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/icon",type:4},
+            {mark:1011,text:"菜谱轮播图",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/image",type:4},
+            {mark:1020,text:"菜谱步骤图",minimun:0,maximum:1,cache_size:1,cache_unit:"MB",directory:"cookbook/step",type:5},
+            {mark:1030,text:"登录/注册引导图",minimun:0,maximum:4,cache_size:2,cache_unit:"MB",directory:"guide/init",type:1},
+            {mark:1031,text:"首页引导图",minimun:0,maximum:4,cache_size:5,cache_unit:"MB",directory:"guide/home",type:1}
+        ];
+
         this.goodsState = [
             {value:"SALE",text:"出售中",mark:1,color:"green"},
             {value:"OFF_SHELVES",text:"下架",mark:2,color:"red"}
@@ -276,7 +301,7 @@ define(function (require) {
             {value:"MONTH",text:"月",mark:6},
             {value:"SEASON",text:"季度",mark:7},
             {value:"YEAR",text:"年",mark:8}
-        ]
+        ];
         this.enumConfig = {
             goodsState:this.goodsState,
             memberState:this.memberState,
@@ -284,12 +309,13 @@ define(function (require) {
             client:this.client,
             deviceType:this.deviceType,
             orderState:this.orderState,
-            timeUnit:this.timeUnit
+            timeUnit:this.timeUnit,
+            cfgResource:this.cfgResource
         };
         this.cuisineType = [
             {value:"主料",text:"主料",mark:1},
             {value:"辅料",text:"辅料",mark:2}
-        ]
+        ];
 
         this.getEntity = function (key,value) {
             var entity = this.enumConfig[key];

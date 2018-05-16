@@ -14,7 +14,7 @@ define(function (require) {
                 selectedMulti: false
             },
             check: {
-                enable: true
+                enable: false
             },
             data: {
                 key:{

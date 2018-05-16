@@ -1,0 +1,77 @@
+<div class="tableToolbar">
+    <div class="coll-md-8" id="addInput">
+        <!--<div class="coll-md-2">-->
+            <!--<input type="text" class='search' placeholder="名称" ng-model="desc">-->
+        <!--</div>-->
+        <div class="coll-md-1">
+            <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="resetSearch()">
+            <input type="button" class="small-icon reset" value="重置">
+        </div>
+    </div>
+    <div class="coll-md-2">
+        <input type="button" class="bttn pos-left" data-ng-click="add()" value="新增">
+    </div>
+</div>
+<div style="width:100%;overflow-x: auto">
+    <table>
+        <thead>
+        <tr>
+            <th>名称</th>
+            <th>资源类型</th>
+            <th>资源</th>
+            <th>链接地址</th>
+            <th>排序号</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in resources">
+            <td>{{item.name}}</td>
+            <td>{{item.cfgId | enumFilter:'cfgResource'}}</td>
+            <td style="padding:4px 0;"><img ng-src="{{item.url}}" width="80" height="50" ng-click="openMaxPic(item.url)"/></td>
+            <td>{{item.link}}</td>
+            <td>{{item.priority}}</td>
+            <td>{{item.created|timeFilter}}</td>
+            <td>
+                <a ng-click="update(item)">编辑</a>
+                <a ng-click="delete(item)">删除</a>
+                <a ng-click="linkEdit(item)">配置资源链接</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize">
+    <uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages()"></uib-pagination>
+</div>
+<modal title="添加" visible="addViewModal">
+    <form class="form-horizontal" role="form" name="myForm" ng-submit="submit(myForm.$valid)" >
+        <div class="form-body">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">选择资源类型</label>
+                        <div class="col-md-10">
+                            <select class="form-control" data-ng-model="curCfgResource">
+                                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}">{{item.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="resource" name="source" type="file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>
+<maxmodal title="查看图片" visible="MaxPicModal">
+    <div style="text-align: center">
+        <img ng-src="{{url}}" alt="" width="1000">
+    </div>
+</maxmodal>
