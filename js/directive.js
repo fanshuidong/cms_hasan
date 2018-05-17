@@ -673,8 +673,73 @@ define(function (require) {
         };
     });
 
+    app.directive('laydate', function() {
+        return {
+            require: '?ngModel',
+            restrict: 'A',
+            scope: {
+                ngModel: '='
+            },
+            link: function(scope, element, attr, ngModel) {
+                // 初始化
+                laydate.render({
+                    elem: '#' + attr.id,
+                    range: attr.range,
+                    done: function(data) {
+                        scope.$apply(setViewValue(data));
+                    },
+                    clear:function () {
+                        ngModel.$setViewValue('');
+                    }
+                });
+                // 模型值同步到视图上
+                ngModel.$render = function() {
+                    element.val(ngModel.$viewValue || '');
+                };
+
+                setViewValue();
+
+                // 更新模型上的视图值
+                function setViewValue(data) {
+                    ngModel.$setViewValue(data);
+                }
+            }
+        }
+    });
 
 
+    app.directive('laydateType', function() {
+        return {
+            require: '?ngModel',
+            restrict: 'A',
+            scope: {
+                ngModel: '='
+            },
+            link: function(scope, element, attr, ngModel) {
+                // 初始化
+                laydate.render({
+                    elem: '#' + attr.id,
+                    type:attr.laydateType,
+                    range: attr.range,
+                    done: function(data) {
+                        scope.$apply(setViewValue(data));
+                    },
+                    clear:function () {
+                        ngModel.$setViewValue('');
+                    }
+                });
+                // 模型值同步到视图上
+                ngModel.$render = function() {
+                    element.val(ngModel.$viewValue || '');
+                };
 
+                setViewValue();
 
+                // 更新模型上的视图值
+                function setViewValue(data) {
+                    ngModel.$setViewValue(data);
+                }
+            }
+        }
+    });
 });

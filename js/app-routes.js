@@ -232,6 +232,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/districtsCtrl.js',
                 controller: "districtsCtrl"
             })
+            .state("system.date", {
+                url: "/date",
+                templateUrl: "view/system/date.html",
+                controllerUrl: 'viewjs/system/dateCtrl.js',
+                controller: "dateCtrl"
+            })
     }]);
 
     app.service("Url",function(){
@@ -249,13 +255,13 @@ define(function (require) {
         this.cfgResource = [
             {mark:1,text:"轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"banner",type:1},
             {mark:50,text:"用户头像",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"avatar",type:2},
-            {mark:100,text:"链接",minimun:0,maximum:0,cache_size:5,cache_unit:"MB",directory:"link",type:1},
-            {mark:1000,text:"商品icon",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/icon",type:3},
-            {mark:1001,text:"商品轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"goods/image",type:3},
-            {mark:1002,text:"商家名菜",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/dish",type:3},
-            {mark:1010,text:"菜谱ICON",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/icon",type:4},
-            {mark:1011,text:"菜谱轮播图",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/image",type:4},
-            {mark:1020,text:"菜谱步骤图",minimun:0,maximum:1,cache_size:1,cache_unit:"MB",directory:"cookbook/step",type:5},
+            {mark:100,text:"链接",minimun:0,maximum:0,cache_size:5,cache_unit:"MB",directory:"link",type:3},
+            {mark:1000,text:"商品icon",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/icon",type:100},
+            {mark:1001,text:"商品轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"goods/image",type:100},
+            {mark:1002,text:"商家名菜",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/dish",type:100},
+            {mark:1010,text:"菜谱ICON",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/icon",type:101},
+            {mark:1011,text:"菜谱轮播图",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/image",type:101},
+            {mark:1020,text:"菜谱步骤图",minimun:0,maximum:1,cache_size:1,cache_unit:"MB",directory:"cookbook/step",type:102},
             {mark:1030,text:"登录/注册引导图",minimun:0,maximum:4,cache_size:2,cache_unit:"MB",directory:"guide/init",type:1},
             {mark:1031,text:"首页引导图",minimun:0,maximum:4,cache_size:5,cache_unit:"MB",directory:"guide/home",type:1}
         ];

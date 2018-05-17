@@ -1,10 +1,15 @@
 <div class="tableToolbar">
     <div class="coll-md-8" id="addInput">
-        <!--<div class="coll-md-2">-->
-            <!--<input type="text" class='search' placeholder="名称" ng-model="desc">-->
-        <!--</div>-->
+        <div class="coll-md-2">
+            <select class="form-control" data-ng-model="resourceSearchEntity.cfgId">
+                <option value="" disabled selected hidden>选择资源类型</option>
+                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}" data-ng-show="item.type==1">{{item.text}}</option>
+            </select>
+        </div>
         <div class="coll-md-1">
-            <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="resetSearch()">
+            <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search()">
+            <input type="button" class="small-icon search2" value="搜索">
+            <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="reset()">
             <input type="button" class="small-icon reset" value="重置">
         </div>
     </div>
@@ -53,8 +58,8 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">选择资源类型</label>
                         <div class="col-md-10">
-                            <select class="form-control" data-ng-model="curCfgResource">
-                                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}">{{item.text}}</option>
+                            <select class="form-control" data-ng-model="curCfgResource.id">
+                                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}" data-ng-show="item.type==1">{{item.text}}</option>
                             </select>
                         </div>
                     </div>
@@ -66,6 +71,71 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </form>
+</modal>
+<modal title="编辑资源" visible="editViewModal">
+    <form class="form-horizontal" role="form" name="myForm" >
+        <div class="form-body">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">资源名称</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" data-ng-model="resource.name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">资源排序号</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" data-ng-model="resource.priority" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttonArea col-md-12">
+                <button type="button" class="btn blue" ng-disabled="myForm.$invalid" data-ng-click="editInfo()">提交</button>
+            </div>
+        </div>
+    </form>
+</modal>
+<modal title="编辑链接地址" visible="linkViewModal">
+    <form class="form-horizontal" role="form" name="myForm" >
+        <div class="form-body">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">链接类型</label>
+                        <div class="col-md-10">
+                            <select class="form-control" data-ng-model="resource.type">
+                                <option  value="" disabled selected hidden>请选择</option>
+                                <option  value="1">文本链接</option>
+                                <option  value="2">图片链接</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10" data-ng-show="resource.type==1">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">文本链接：</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" data-ng-model="resource.link" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10" data-ng-show="resource.type==2">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="link" name="source" type="file"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttonArea col-md-12">
+                <button type="button" class="btn blue" ng-disabled="myForm.$invalid" data-ng-click="editLink()" data-ng-show="resource.type==1">提交</button>
             </div>
         </div>
     </form>

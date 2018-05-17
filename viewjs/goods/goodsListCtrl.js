@@ -9,7 +9,8 @@ define(function (require) {
     var datepicker = require('datepicker');
     var toastr =require('toastr');
     require('bootstrap-fileinput-zh');
-    app.controller('goodsListCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
+    app.controller('goodsListCtrl', ['$scope','$http','search','enums','Url',function ($scope, $http,search,enums,Url) {
+        var httpUrl = Url.hasan[window.localStorage.getItem("h_apiUrl")];
         //获取菜谱列表
         $scope.goodsState = enums.goodsState;
         $http({
@@ -183,7 +184,7 @@ define(function (require) {
                             for(var j = 0;j<$scope.goodsResource[key].length;j++){
                                 initialPreviewConfig.push({
                                     caption:$scope.goodsResource[key][j].name,
-                                    key:'http://172.16.20.93:8089/hasan/resource/deleteByAjax',
+                                    key:httpUrl+'hasan/resource/delete/form',
                                     extra:{id:$scope.goodsResource[key][j].id}
 
                                 });
@@ -201,7 +202,7 @@ define(function (require) {
             $("#"+id).fileinput('destroy');
             $("#"+id).fileinput({
                 language: 'zh', //设置语言
-                uploadUrl: 'http://172.16.20.93:8089/hasan/resource/upload', // you must set a valid URL here else you will get an error
+                uploadUrl: httpUrl+'hasan/resource/upload', // you must set a valid URL here else you will get an error
                 uploadExtraData:function(previewId, index) {   //额外参数的关键点
                     var name = $("#"+previewId).find(".file-footer-caption").attr("title");
                     if(name){

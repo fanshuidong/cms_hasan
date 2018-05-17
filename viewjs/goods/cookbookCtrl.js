@@ -166,7 +166,7 @@ define(function (require) {
                         if($scope.cookbookResource[index].cfgId == $scope.cfgCookbookResource[i].id){
                             initialPreviewConfig.push({
                                 caption:$scope.cookbookResource[index].name,
-                                key:httpUrl+'hasan/resource/deleteByAjax',
+                                key:httpUrl+'hasan/resource/delete/form',
                                 extra:{id:$scope.cookbookResource[index].id}
 
                             });
