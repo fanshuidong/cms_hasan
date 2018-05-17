@@ -37,6 +37,22 @@ define(function (require) {
             }
         };
 
+        $scope.setting2 = {
+            check: {
+                enable: false
+            },
+            data: {
+                key:{
+                    name:"name"
+                },
+                simpleData: {
+                    enable: true,
+                    idKey:"code",
+                    pIdKey:"parent"
+                }
+            }
+        };
+
         //获取是所有行政区划
         $http({
             method: 'POST',
@@ -51,33 +67,31 @@ define(function (require) {
                     url: "hasan/geo/districts",
                     data:{}
                 }).success(function (data) {
-                    var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-                    for(var i=0;i<data.attach.length;i++){
-                        if(treeObj.getNodeByParam("code",data.attach[i].code))
-                            treeObj.checkNode(treeObj.getNodeByParam("code",data.attach[i].code),true);
+                    if(data.code == 'code.success'){
+                        expand(data.attach);//展开已分配城市
+                        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                        var nodes = treeObj.getNodes();
+                        for (var i = 0; i < nodes.length; i++) { //设置节点展开
+                            treeObj.expandNode(nodes[i], true, false, true);
+                        }
+                        for(var i=0;i<data.attach.length;i++){
+                            if(treeObj.getNodeByParam("code",data.attach[i].code))
+                                treeObj.checkNode(treeObj.getNodeByParam("code",data.attach[i].code),true);
+                        }
                     }
                 });
             }
         });
 
-        // $scope.updateDistricts = function () {
-        //     var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        //     var nodes = treeObj.getCheckedNodes(true);
-        //     var codes = [];
-        //     for(var i = 0 ; i< nodes.length ;i++)
-        //         codes.push(nodes[i].code)
-        //     $http({
-        //         method: 'POST',
-        //         url: "hasan/geo/districts/auth",
-        //         data:{codes:codes}
-        //     }).success(function (data) {
-        //         if(data.code=='code.success'){
-        //             console.log(data);
-        //             toastr.success('提交成功');
-        //             window.location.reload();
-        //         }
-        //     });
-        // };
+        //展开
+        function expand(data) {
+            $.fn.zTree.init($("#treeDemo2"), $scope.setting2, data);
+            var treeObj2 = $.fn.zTree.getZTreeObj("treeDemo2");
+            var nodes2 = treeObj2.getNodes();
+            for (var i = 0; i < nodes2.length; i++) { //设置节点展开
+                treeObj2.expandNode(nodes2[i], true, true, true);
+            }
+        }
 
         function zTreeOnCheck(event, treeId, treeNode) {
             $http({
@@ -87,6 +101,15 @@ define(function (require) {
             }).success(function (data) {
                 if(data.code=='code.success'){
                     console.log(data);
+                    $http({
+                        method: 'POST',
+                        url: "hasan/geo/districts",
+                        data:{}
+                    }).success(function (data) {
+                        if(data.code == 'code.success'){
+                            expand(data.attach);//展开已分配城市
+                        }
+                    });
                     //toastr.success('提交成功');
                     //window.location.reload();
                 }
