@@ -14,13 +14,23 @@ define(function (require) {
         $rootScope.adminId = window.localStorage.getItem("h_adminId");
         $rootScope.defaultPageSize = 10;
     }]);
-    app.controller('AppController', ['$scope','$rootScope', '$http',function($scope,$rootScope,$http) {
+    app.controller('AppController', ['$scope','$rootScope', '$http','enums',function($scope,$rootScope,$http,enums) {
+        //获取后台系统配置
         $http({
             method: 'POST',
             url:"hasan/common/configs",
             data:{}
         }).success(function(data) {
             $rootScope.GlobalConfig=data.attach;
+        });
+        //获取后台图片资源配置
+        $http({
+            method: 'POST',
+            url:"hasan/config/resources",
+            data:{}
+        }).success(function(data) {
+            enums.cfgResource = data.attach.list;
+            enums.enumConfig.cfgResource = enums.cfgResource;
         });
     }]);
     app.controller('HeaderController', ['$rootScope', '$scope', '$http','$interval','$timeout','$filter',
@@ -134,6 +144,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/order/orderListCtrl.js',
                 controller: "orderListCtrl"
             })
+            .state("order.assistant", {
+                url: "/assistant",
+                templateUrl: "view/order/assistant.html",
+                controllerUrl: 'viewjs/order/assistantCtrl.js',
+                controller: "assistantCtrl"
+            })
 
             //商品管理
             .state("goods", {
@@ -163,11 +179,11 @@ define(function (require) {
                 controllerUrl: 'viewjs/user/userListCtrl.js',
                 controller: "userListCtrl"
             })
-            .state("user.member", {
-                url: "/role",
-                templateUrl: "view/user/member.html",
-                controllerUrl: 'viewjs/user/memberCtrl.js',
-                controller: "memberCtrl"
+            .state("user.assistantUser", {
+                url: "/assistantUser",
+                templateUrl: "view/user/assistantUser.html",
+                controllerUrl: 'viewjs/user/assistantUserCtrl.js',
+                controller: "assistantUserCtrl"
             })
             //消息管理
             .state("message", {
@@ -238,6 +254,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/dateCtrl.js',
                 controller: "dateCtrl"
             })
+            .state("system.cfgResource", {
+                url: "/cfgResource",
+                templateUrl: "view/system/cfgResource.html",
+                controllerUrl: 'viewjs/system/cfgResourceCtrl.js',
+                controller: "cfgResourceCtrl"
+            })
     }]);
 
     app.service("Url",function(){
@@ -253,22 +275,15 @@ define(function (require) {
         this.cookbookResource = [1010,1011];
 
         this.cfgResource = [
-            {mark:1,text:"轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"banner",type:1},
-            {mark:50,text:"用户头像",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"avatar",type:2},
-            {mark:100,text:"链接",minimun:0,maximum:0,cache_size:5,cache_unit:"MB",directory:"link",type:3},
-            {mark:1000,text:"商品icon",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/icon",type:100},
-            {mark:1001,text:"商品轮播图",minimun:0,maximum:3,cache_size:2,cache_unit:"MB",directory:"goods/image",type:100},
-            {mark:1002,text:"商家名菜",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"goods/dish",type:100},
-            {mark:1010,text:"菜谱ICON",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/icon",type:101},
-            {mark:1011,text:"菜谱轮播图",minimun:0,maximum:1,cache_size:2,cache_unit:"MB",directory:"cookbook/image",type:101},
-            {mark:1020,text:"菜谱步骤图",minimun:0,maximum:1,cache_size:1,cache_unit:"MB",directory:"cookbook/step",type:102},
-            {mark:1030,text:"登录/注册引导图",minimun:0,maximum:4,cache_size:2,cache_unit:"MB",directory:"guide/init",type:1},
-            {mark:1031,text:"首页引导图",minimun:0,maximum:4,cache_size:5,cache_unit:"MB",directory:"guide/home",type:1}
         ];
 
         this.goodsState = [
             {value:"SALE",text:"出售中",mark:1,color:"green"},
             {value:"OFF_SHELVES",text:"下架",mark:2,color:"red"}
+        ];
+        this.schedulerType = [
+            {value:"PACKAGE",text:"打包",mark:1},
+            {value:"DELIVERY",text:"配送",mark:2}
         ];
         this.memberState = [
             {value:true,text:"出售中",mark:1,color:"green"},
@@ -311,6 +326,7 @@ define(function (require) {
         this.enumConfig = {
             goodsState:this.goodsState,
             memberState:this.memberState,
+            schedulerType:this.schedulerType,
             os:this.os,
             client:this.client,
             deviceType:this.deviceType,

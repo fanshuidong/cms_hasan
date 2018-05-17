@@ -16,10 +16,10 @@ define(function (require) {
         //获取菜谱图片上传类型
         $http({
             method: 'POST',
-            url:"hasan/resource/configs",
+            url:"hasan/config/resources",
             data:{ids:enums.cookbookResource}
         }).success(function(data) {
-            $scope.cfgCookbookResource=data.attach;
+            $scope.cfgCookbookResource=data.attach.list;
         });
         //获取商品列表
         $http({
@@ -28,14 +28,6 @@ define(function (require) {
             data:{}
         }).success(function(data) {
             $scope.goodsList=data.attach.list;
-        });
-        //获取菜谱图片上传类型
-        $http({
-            method: 'POST',
-            url:"hasan/resource/configs",
-            data:{ids:enums.cookbookResource}
-        }).success(function(data) {
-            $scope.cfgCookbookResource=data.attach;
         });
         datepicker($scope);
         $scope.maxSize=5;

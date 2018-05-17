@@ -3,7 +3,7 @@
         <div class="coll-md-2">
             <select class="form-control" data-ng-model="resourceSearchEntity.cfgId">
                 <option value="" disabled selected hidden>选择资源类型</option>
-                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}" data-ng-show="item.type==1">{{item.text}}</option>
+                <option data-ng-repeat="item in cfgResource" value="{{item.id}}" data-ng-show="item.type==1">{{item.name}}</option>
             </select>
         </div>
         <div class="coll-md-1">
@@ -59,7 +59,7 @@
                         <label class="control-label col-md-2">选择资源类型</label>
                         <div class="col-md-10">
                             <select class="form-control" data-ng-model="curCfgResource.id">
-                                <option data-ng-repeat="item in cfgResource" value="{{item.mark}}" data-ng-show="item.type==1">{{item.text}}</option>
+                                <option data-ng-repeat="item in cfgResource" value="{{item.id}}" data-ng-show="item.type==1">{{item.name}}</option>
                             </select>
                         </div>
                     </div>

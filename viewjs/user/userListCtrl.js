@@ -8,23 +8,22 @@ define(function (require) {
     var toastr =require('toastr');
     app.useModule("ui.table");
     require('multiselect');
-    app.controller('userListCtrl', ['$scope','$http','search',function ($scope, $http,search) {
+    app.controller('userListCtrl', ['$scope','$http',function ($scope, $http) {
         datepicker($scope);
         $scope.selectOptions = {
             allowClear: false,
             language : 'zh-CN'
         };
         $scope.maxSize=5;
-        var userSearchEntity = search.searchEntity;
-
+        $scope.userSearchEntity = {"page":1,"pageSize":10};
         $scope.query=function(reset){
             if(reset){
-                userSearchEntity = {"page":1,"pageSize":10}
+                $scope.userSearchEntity = {"page":1,"pageSize":10}
             }
             $http({
                 method: 'POST',
                 url: "hasan/user/list",
-                data:userSearchEntity
+                data:$scope.userSearchEntity
             }).success(function(data) {
                 console.log(data);
                 $scope.userList=data.attach.list;
@@ -34,22 +33,94 @@ define(function (require) {
         $scope.query(true);
         // 切换页码时
         $scope.changePages=function(){
-            userSearchEntity.query.page=$scope.page;
+            $scope.userSearchEntity.query.page=$scope.page;
             $scope.query();
         };
         //条件查询
         $scope.search=function(){
-            userSearchEntity = {"page":1,"pageSize":10};
-            if($scope.uid)
-                userSearchEntity.uid = $scope.uid;
             $scope.query();
         };
         //全局查询重置
         $scope.reset=function(){
-            $scope.uid = "";
             $scope.query(true);
         };
 
+        /*******************客服可分配用列表************************/
+        $scope.query2=function(reset){
+            if(reset){
+                $scope.assistantUserSearchEntity = {"page":1,"pageSize":10,deviceType:2};
+            }
+            $http({
+                method: 'POST',
+                url: "hasan/common/allocatable/users",
+                data:$scope.assistantUserSearchEntity
+            }).success(function(data) {
+                console.log(data);
+                $scope.userList2=data.attach.list;
+                $scope.bigTotalItems2=data.attach.total;
+            });
+        };
+        // 切换页码时
+        $scope.changePages2=function(){
+            $scope.assistantUserSearchEntity.query.page=$scope.page2;
+            $scope.query2();
+        };
+        //条件查询
+        $scope.search2=function(){
+            $scope.query2();
+        };
+        //全局查询重置
+        $scope.reset2=function(){
+            $scope.query2(true);
+        };
+        $scope.assistant = function (uid) {
+            $scope.assistantUid = uid;
+            $scope.assistantModal = !$scope.assistantModal;
+            $http({
+                method: 'POST',
+                url: "hasan/common/assistant/users",
+                data:{assistant:uid,deviceType:2}
+            }).success(function(data) {
+                console.log(data);
+                $scope.assistantUserList=data.attach.list;
+                $scope.query2(true);
+            });
+        };
+
+        $scope.deleteAssistantUser = function (uid) {
+            $http({
+                method: 'POST',
+                url: "hasan/common/assistant/delete",
+                data:{id:uid}
+            }).success(function(data) {
+                console.log(data);
+                if(data.code=="code.success"){
+                    for(var i in $scope.assistantUserList){
+                        if($scope.assistantUserList[i].uid == uid){
+                            $scope.assistantUserList.splice(i,1);
+                        }
+                    }
+                    $scope.query2(true);
+                }
+            });
+        };
+
+        //分配用户给客服
+        $scope.selectAssistantUser = function (item) {
+            $http({
+                method: 'POST',
+                url: "hasan/common/assistant/allocate",
+                data:{assistant:$scope.assistantUid,id:item.uid}
+            }).success(function(data) {
+                console.log(data);
+                if(data.code=="code.success"){
+                    $scope.assistantUserList.push(item);
+                    $scope.query2(true);
+                }
+            });
+        };
+
+        //用户分配角色
         $scope.userAuth = function (item) {
             $scope.userAuthModal = !$scope.userAuthModal;
             $scope.userAuthInit(item.uid);

@@ -6,11 +6,11 @@ define(function(require) {
         return function (value,name) {//value为需要被过滤的值,name表示枚举对象名
             var entity = enums.enumConfig[name];
             for(var index in entity){
-                if(value == entity[index].mark || value==entity[index].value){
+                if(value == entity[index].mark || value==entity[index].value || value==entity[index].id){
                     if(entity[index].color){
                         return $sce.trustAsHtml("<span style='color: "+entity[index].color+"'>"+entity[index].text+"</span>");
                     }else{
-                        return entity[index].text;
+                        return entity[index].name?entity[index].name:entity[index].text;
                     }
                 }
 			}
@@ -31,4 +31,12 @@ define(function(require) {
             return out;
         }
     });
+
+    app.filter("minutesFilter",function () {//分钟转日分秒格式
+        return function(minutes){
+            var h = parseInt(minutes/60);
+            var m = minutes%60;
+            return (h<10?("0"+h):h)+":"+(m<10?("0"+m):m)+":00";
+        }
+    })
 });

@@ -23,10 +23,10 @@ define(function (require) {
         //获取商品图片上传类型
         $http({
             method: 'POST',
-            url:"hasan/resource/configs",
+            url:"hasan/config/resources",
             data:{ids:enums.goodsResource}
         }).success(function(data) {
-            $scope.cfgGoodsResource=data.attach;
+            $scope.cfgGoodsResource=data.attach.list;
         });
         datepicker($scope);
         $scope.selectOptions = {

@@ -7,7 +7,8 @@ define(function (require) {
     var toastr =require('toastr');
     app.useModule("ui.table");
     var datepicker = require('datepicker');
-    app.controller('orderListCtrl', ['$scope','$http','search','enums',function ($scope, $http,search,enums) {
+    app.controller('assistantCtrl', ['$scope','$http','enums',function ($scope, $http,enums) {
+        var uid = window.localStorage.getItem("h_adminId");
         datepicker($scope);
         $scope.orderState = enums.orderState;
         $scope.selectOptions = {
@@ -17,11 +18,11 @@ define(function (require) {
         $scope.maxSize=5;
         $scope.query=function(reset){
             if(reset){
-                $scope.orderSearchEntity = {"page":1,"pageSize":10}
+                $scope.orderSearchEntity = {"page":1,"pageSize":10,assistant:uid}
             }
             $http({
                 method: 'POST',
-                url: "hasan/order/list/all",
+                url: "hasan/order/assistant",
                 data:$scope.orderSearchEntity
             }).success(function(data) {
                 console.log(data);

@@ -1,7 +1,10 @@
 <div class="tableToolbar">
     <div class="coll-md-9" id="addInput">
         <div class="coll-md-2">
-            <input type="text" class='search' placeholder="用户编号" ng-model="uid">
+            <input type="text" class='search' placeholder="用户编号" ng-model="userSearchEntity.uid">
+        </div>
+        <div class="coll-md-2">
+            <input type="text" class='search' placeholder="用户名" ng-model="userSearchEntity.username">
         </div>
         <div class="coll-md-4 scalenone"  id="searchdate" datahide>
             <div class="coll-md-5" >
@@ -49,7 +52,6 @@
         <th>用户名</th>
         <th>注册时间</th>
         <th>操作系统</th>
-        <th>头像</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -59,9 +61,9 @@
         <td>{{item.username}}</td>
         <td>{{item.registerTime | timeFilter}}</td>
         <td>{{item.os | enumFilter:'os'}}</td>
-        <td>{{item.avatar}}</td>
         <td>
-            <a ng-click="userAuth(item)">授权</a>
+            <a ng-click="userAuth(item)">角色授权</a>
+            <a ng-click="assistant(item.uid)">分配客户</a>
         </td>
     </tr>
     </tbody>
@@ -73,7 +75,7 @@
 <modal title="用户授权" visible="userAuthModal">
     <div class="row">
             <div class="col-xs-5">
-                <select name="from[]" id="multiselect1" class="form-control" size="8" multiple="multiple">
+                <select name="from[]" id="multiselect1"  class="form-control" size="8" multiple="multiple">
                     <option  ng-repeat="item in leftList" value="{{item.id}}">{{item.name}}</option>
                 </select>
             </div>
@@ -88,5 +90,101 @@
                     <option  ng-repeat="item in rightList" value="{{item.id}}">{{item.name}}</option>
                 </select>
             </div>
+    </div>
+</modal>
+
+<modal title="分配客户" visible="assistantModal">
+    <form class="form-horizontal" name="myForm">
+        <div class="form-body">
+            <div class="scrollArea">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <h4>已分配客户列表</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>用户编号</th>
+                                        <th>用户名</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="item in assistantUserList">
+                                        <td>{{item.uid}}</td>
+                                        <td>{{item.username}}</td>
+                                        <td>
+                                            <a ng-click="deleteAssistantUser(item.uid)">删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <h4>可分配客户</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" style="margin-top: 20px;margin-left: 10px;">
+                        <div class="coll-md-12" id="addInput1">
+                            <div class="coll-md-4">
+                                <input type="text" class='search' placeholder="姓名" ng-model="assistantUserSearchEntity.uid">
+                            </div>
+                            <div class="coll-md-4">
+                                <input type="text" class='search' placeholder="手机号" ng-model="assistantUserSearchEntity.username">
+                            </div>
+                            <div class="coll-md-1">
+                                <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search2()">
+                                <input type="button" class="small-icon search2" value="搜索">
+                                <input type="button" class="small-icon reset-icon" reset-icon value="重置" ng-click="reset2()">
+                                <input type="button" class="small-icon reset" value="重置">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12" style="margin-top: 20px;">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>用户编号</th>
+                                        <th>用户名</th>
+                                        <th>注册时间</th>
+                                        <th>操作系统</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="item in userList2">
+                                        <td>{{item.uid}}</td>
+                                        <td>{{item.username}}</td>
+                                        <td>{{item.registerTime | timeFilter}}</td>
+                                        <td>{{item.os | enumFilter:'os'}}</td>
+                                        <td><a data-ng-click="selectAssistantUser(item)">分配</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize2">
+                                    <uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page2" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages2()"></uib-pagination>
+                                </div>
+                            </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+
     </div>
 </modal>
