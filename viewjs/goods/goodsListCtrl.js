@@ -73,22 +73,22 @@ define(function (require) {
 
         //创建
         $scope.goods={};
-        //获取会员列表
-        $http({
-            method: 'POST',
-            url:"hasan/common/members",
-            data:{sale:true}
-        }).success(function(data) {
-            $scope.members=data.attach.list;
-            for(var i in $scope.members){
-                $scope.members[i].price = "";
-            }
-        });
         $scope.add=function(){
             $("#goodsInfo").show();
             $("#uploadPic").hide();
             $("#goods").click();
             $scope.isAdd = true;
+            //获取会员列表
+            $http({
+                method: 'POST',
+                url:"hasan/common/members",
+                data:{sale:true}
+            }).success(function(data) {
+                $scope.members=data.attach.list;
+                for(var i in $scope.members){
+                    $scope.members[i].price = "";
+                }
+            });
             $scope.goodsResource=[];
             $scope.addGoodsModal = !$scope.addGoodsModal;
         };
@@ -112,6 +112,7 @@ define(function (require) {
                     inventory:data.attach.inventory
                 };
                 $scope.members = data.attach.prices;
+                // $scope.goods.ownerPrice= $scope.goods.ownerPrice;
                 $scope.goodsResource=data.attach.resources;
                 $scope.initFileInput();
             });
@@ -134,6 +135,8 @@ define(function (require) {
 
         $scope.submit = function () {
             $scope.goods.prices = {};
+            if($scope.isAdd)
+                $scope.goods.prices[0] = $scope.goods.ownerPrice;
             for(var i = 0 ; i<$scope.members.length;i++){
                 if($scope.isAdd)
                     $scope.goods.prices[$scope.members[i].id] = $scope.members[i].price;
@@ -147,9 +150,9 @@ define(function (require) {
             }).success(function(data) {
                 if (data.code == "code.success") {
                     toastr.success("提交成功！");
-                    $scope.goods.id = data.attach;
                     $scope.query();
                     if($scope.isAdd){
+                        $scope.goods.id = data.attach;
                         $("#goodsInfo").hide();
                         $("#uploadPic").show();
                         $("#picTab").click();

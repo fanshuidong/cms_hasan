@@ -121,6 +121,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6" data-ng-show="isAdd">
+                            <div class="form-group">
+                                <label  class="control-label col-md-4">原价:</label>
+                                <div class="col-md-8">
+                                    <input  type="number" class="form-control" data-ng-model="goods.ownerPrice" name="ownerPrice" ng-required="isAdd"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6" data-ng-repeat="item in members">
                             <div class="form-group">
                                 <label  class="control-label col-md-4">{{item.name}}:</label>

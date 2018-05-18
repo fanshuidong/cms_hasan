@@ -79,6 +79,7 @@
             <ul id="myTab" class="nav nav-tabs">
                 <li class="active" id="cookbookInfo"><a  href="#item1" data-toggle="tab" id="cookbook">菜谱基础属性</a></li>
                 <li id="uploadPic" style="display: none"><a href="#item2" data-toggle="tab" id="picTab">{{cookbook.name}}_图片上传</a></li>
+                <li id="editStep" style="display: none"><a href="#item3" data-toggle="tab" id="setpTab">{{cookbook.name}}_步骤编辑</a></li>
             </ul>
             <div class="tab-content" style="margin-top:10px;">
                 <!--菜谱基础属性-->
@@ -173,6 +174,53 @@
                         </div>
                     </div>
                 </div>
+
+                <!--菜谱步骤-->
+                <div class="tab-pane fade" id="item3">
+                    <div style="margin-right: 10px;" class="clear">
+                        <button type="button" class="btn btn-default btn-sm" title="添加步骤" data-ng-click="addStep()" style="float: right">
+                            <span class="glyphicon glyphicon-plus">添加步骤</span>
+                        </button>
+                    </div>
+                    <div  class="row" style="margin-top: 10px;">
+                        <div data-ng-repeat="item in steps" style="background-color:#E7E7E7;margin-top: 20px;padding: 5px" class="clear">
+                            <!--<div  class="clear" style="margin-right: 10px;margin-bottom: 10px">-->
+                                <!--<button type="button" class="btn btn-default btn-sm" title="删除" data-ng-click="deleteStep($index)" style="float: right;">-->
+                                    <!--<span class="glyphicon glyphicon glyphicon-trash"></span>-->
+                                <!--</button>-->
+                            <!--</div>-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  class="control-label col-md-4">名称:</label>
+                                    <div class="col-md-8">
+                                        <input  type="text" class="form-control" data-ng-model="item.name" name="name" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  class="control-label col-md-4">排序号:</label>
+                                    <div class="col-md-8">
+                                        <input  type="number" class="form-control" data-ng-model="item.priority" name="priority" required/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label  class="control-label col-md-2">内容:</label>
+                                    <div class="col-md-10">
+                                        <textarea name="content"  class="form-control" data-ng-model="item.content" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-right" style="margin-bottom:5px;">
+                                <a type="submit" class="btn blue" data-ng-click="stepInfoEdit($index)">提交</a>
+                                <a type="submit" class="btn blue" data-ng-click="stepImagesEdit($index)">编辑步骤图片</a>
+                                <a type="submit" class="btn blue" data-ng-click="deleteStep($index)">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
@@ -209,6 +257,28 @@
 
                 <div class="buttonArea col-md-12" style="border:none">
                     <button type="submit" class="btn blue" ng-disabled="myForm.$invalid">提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>
+
+<!--编辑步骤图片-->
+<modal title="编辑步骤图片" visible="stepImagesModal">
+    <form class="form-horizontal" role="form" name="myForm" >
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-12" data-ng-repeat-start="item2 in cfgStepResource" style="margin: 20px 0;font-size: 18px;background: #efeff5;padding: 10px 0">
+                    <strong>{{item2.name}} <span style="color: red">最多上传{{item2.maximum}}张图片</span></strong>
+                </div>
+                <div class="row" data-ng-repeat-end>
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input id="{{item2.id}}" name="source" type="file" multiple/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

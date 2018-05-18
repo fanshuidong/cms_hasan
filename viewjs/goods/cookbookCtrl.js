@@ -21,6 +21,14 @@ define(function (require) {
         }).success(function(data) {
             $scope.cfgCookbookResource=data.attach.list;
         });
+        //获取菜谱步骤图片上传类型
+        $http({
+            method: 'POST',
+            url:"hasan/config/resources",
+            data:{ids:[1020]}
+        }).success(function(data) {
+            $scope.cfgStepResource=data.attach.list;
+        });
         //获取商品列表
         $http({
             method: 'POST',
@@ -67,12 +75,14 @@ define(function (require) {
             $scope.isAdd = true;
             $("#cookbookInfo").show();
             $("#uploadPic").hide();
+            $("#editStep").hide();
             $("#cookbook").click();
             // $scope.text = {"goods":[1,2],"cuisineGroups":[{"name":"主料","cuisines":[{"name":"螃蟹","dosage":"1斤"}]},{"name":"辅料","cuisines":[{"name":"大蒜","dosage":"1瓣"},{"name":"洋葱","dosage":"1颗"}]}]};
             $scope.cookbook = {"goods":[],"cuisineGroups":[]};
             //$scope.cuisineGroup = {name:"",cuisines:[]};//菜肴
             //$scope.cuisine = {};
             $scope.cookbookResource=[];
+            $scope.steps=[];
             $scope.cookbookModal = !$scope.cookbookModal;
         };
         //更新
@@ -80,17 +90,20 @@ define(function (require) {
             $scope.isAdd = false;
             $("#cookbookInfo").show();
             $("#uploadPic").show();
+            $("#editStep").show();
             $scope.cookbook = {
                 id:item.id,name:item.name,goods:JSON.parse(item.text).goods,cuisineGroups:JSON.parse(item.text).cuisineGroups
             };
             $scope.cookbookModal = !$scope.cookbookModal;
             $http({
                 method: 'POST',
-                url:"hasan/resource/list",
-                data:{cfgIds:enums.cookbookResource,owner:$scope.cookbook.id}
+                url:"hasan/cookbook/detail",
+                data:{id:item.id}
             }).success(function(data) {
-                $scope.cookbookResource=data.attach.list;
-                $scope.initFileInput();
+                console.log(data);
+                $scope.cookbookResource=data.attach.images;
+                $scope.steps=data.attach.steps;
+                $scope.initFileInput($scope.cfgCookbookResource,$scope.cookbookResource,item.id);
             });
         };
 
@@ -103,13 +116,14 @@ define(function (require) {
                 }).success(function(data) {
                     if (data.code == "code.success") {
                         toastr.success("提交成功！");
-                        $scope.cookbook.id = data.attach;
                         $scope.query();
                         if($scope.isAdd){
+                            $scope.cookbook.id = data.attach;
                             $("#cookbookInfo").hide();
                             $("#uploadPic").show();
+                            $("#editStep").show();
                             $("#picTab").click();
-                            $scope.initFileInput();
+                            $scope.initFileInput($scope.cfgCookbookResource,null,$scope.cookbook.id);
                         }
                     }
                 });
@@ -148,31 +162,83 @@ define(function (require) {
             $scope.cookbook.cuisineGroups[i].cuisines.splice(j,1)
         };
 
+        //添加步骤
+        $scope.addStep = function () {
+            $scope.steps.push({name:"",content:"",priority:"",cookbookId:$scope.cookbook.id});
+        };
+        //新增修改步骤基础属性
+        $scope.stepInfoEdit = function (i) {
+            $http({
+                method: 'POST',
+                url: $scope.steps[i].id?"hasan/cookbook/step/modify":"hasan/cookbook/step/add",
+                data: $scope.steps[i]
+            }).success(function (data) {
+                if (data.code == "code.success") {
+                    toastr.success("提交成功！");
+                    if(!$scope.steps[i].id)
+                        $scope.steps[i].id = data.attach;
+                }
+            });
+        };
+        $scope.stepImagesEdit = function (i) {
+            if($scope.steps[i].id){
+                $http({
+                    method: 'POST',
+                    url:"hasan/cookbook/detail",
+                    data:{id:$scope.cookbook.id}
+                }).success(function(data) {
+                    $scope.initFileInput($scope.cfgStepResource,data.attach.steps[i].image,$scope.steps[i].id);
+                });
+                $scope.stepImagesModal = !$scope.stepImagesModal;
+            }else{
+                toastr.error("请先提交该步骤基础数据");
+            }
+        };
+        //删除步骤
+        $scope.deleteStep = function (i) {
+            if($scope.steps[i].id){
+                if(confirm("确认要删除吗？")) {
+                    $http({
+                        method: 'POST',
+                        url: "hasan/cookbook/step/delete",
+                        data: {id: $scope.steps[i].id}
+                    }).success(function (data) {
+                        if (data.code == "code.success") {
+                            toastr.success("删除成功！");
+                            $scope.steps.splice(i,1);
+                        }
+                    });
+                }
+            }else{
+                $scope.steps.splice(i,1);
+            }
+        };
+
+
         //初始化图片上传插件
-        $scope.initFileInput = function () {
-            for(var i= 0 ; i<$scope.cfgCookbookResource.length; i++){
+        $scope.initFileInput = function (cfgResource,resource,owner) {
+            for(var i= 0 ; i<cfgResource.length; i++){
                 var initialPreviewConfig = [];
                 var initialPreview = [];
-                if($scope.cookbookResource){//编辑有初始化图片
-                    for(var index in $scope.cookbookResource){
-                        if($scope.cookbookResource[index].cfgId == $scope.cfgCookbookResource[i].id){
+                if(resource){//编辑有初始化图片
+                    for(var index in resource){
+                        if(resource[index].cfgId == cfgResource[i].id){
                             initialPreviewConfig.push({
-                                caption:$scope.cookbookResource[index].name,
+                                caption:resource[index].name,
                                 key:httpUrl+'hasan/resource/delete/form',
-                                extra:{id:$scope.cookbookResource[index].id}
+                                extra:{id:resource[index].id}
 
                             });
-                            initialPreview.push($scope.cookbookResource[index].url);
+                            initialPreview.push(resource[index].url);
                         }
                     }
                 }
-                $scope.fileInput($scope.cfgCookbookResource[i].id,$scope.cfgCookbookResource[i].maxinum,$scope.cfgCookbookResource[i].cacheSize*1024
-                                 ,initialPreview,initialPreviewConfig);
+                $scope.fileInput(cfgResource[i].id,cfgResource[i].maxinum,cfgResource[i].cacheSize*1024
+                                 ,initialPreview,initialPreviewConfig,owner);
             }
         };
-        $scope.fileInput = function (id,maxinum,size,initialPreview,initialPreviewConfig){
-            $("#"+id).fileinput('destroy');
-            $("#"+id).fileinput({
+        $scope.fileInput = function (id,maxinum,size,initialPreview,initialPreviewConfig,owner){
+            $("#"+id).fileinput('destroy').fileinput({
                 language: 'zh', //设置语言
                 uploadUrl: httpUrl+'hasan/resource/upload', // you must set a valid URL here else you will get an error
                 uploadExtraData:function(previewId, index) {   //额外参数的关键点
@@ -182,7 +248,7 @@ define(function (require) {
                             name:name.split(".")[0],
                             priority:index,
                             cfgResourceId:id,
-                            owner:$scope.cookbook.id
+                            owner:owner
                         }
                     }
                 },
@@ -201,11 +267,10 @@ define(function (require) {
                 initialPreviewFileType: 'image',
                 initialPreview: initialPreview,
                 initialPreviewConfig: initialPreviewConfig
-            });
-            $("#"+id).on("fileuploaded", function (event, data, previewId, index) {
+            }).on("fileuploaded", function (event, data, previewId, index) {
                 console.log(data);
                 if(data.response.code == "code.success"){
-                    toastr.success("上传成功！");
+                    // toastr.success("上传成功！");
                     $("#"+previewId).find(".kv-file-remove").click(function(){
                         $http({
                             method: 'POST',
@@ -213,7 +278,7 @@ define(function (require) {
                             data: {id: data.response.attach.id}
                         }).success(function (data) {
                             if (data.code == "code.success") {
-                                toastr.success("删除成功！");
+                                // toastr.success("删除成功！");
                             }
                         });
                     });
