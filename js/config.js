@@ -35,7 +35,7 @@ define(function (require) {
                 return $q.reject(config);
             },
             response : function(response){
-                if(response.data.code == 110 || response.data.code == 111){
+                if(response.data.code == 'code.user.invalid.token'){
                     window.location.href = "login.html";
                 }
                 if(response.data.code && response.data.code!= "code.success"){

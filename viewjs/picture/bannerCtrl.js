@@ -131,7 +131,7 @@ define(function (require) {
                 allowedFileExtensions : ['jpg', 'png','gif'],
                 showUpload: false, //是否显示上传按钮
                 showRemove:false, // 是否显示移除按钮
-                // maxFileSize: 1,
+                maxFileSize: 0,
                 // maxFileCount: 1,
                 overwriteInitial: false, //不覆盖已存在的图片
                 // layoutTemplates: {
@@ -179,7 +179,7 @@ define(function (require) {
                 allowedFileExtensions : ['jpg', 'png','gif'],
                 showUpload: false, //是否显示上传按钮
                 showRemove:false, // 是否显示移除按钮
-                maxFileSize: 2048,
+                maxFileSize: 0,
                 maxFileCount: 1,
                 overwriteInitial: false, //不覆盖已存在的图片
                 msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！"
