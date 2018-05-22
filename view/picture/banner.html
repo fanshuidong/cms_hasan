@@ -4,6 +4,7 @@
             <select class="form-control" data-ng-model="resourceSearchEntity.cfgId">
                 <option value="" disabled selected hidden>选择资源类型</option>
                 <option data-ng-repeat="item in cfgResource" value="{{item.id}}" data-ng-show="item.type==1">{{item.name}}</option>
+                <option value="1002">商家名菜</option>
             </select>
         </div>
         <div class="coll-md-1">

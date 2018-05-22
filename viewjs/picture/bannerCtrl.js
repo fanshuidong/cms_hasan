@@ -16,7 +16,11 @@ define(function (require) {
             if(reset){
                 $scope.resourceSearchEntity = {page:1,pageSize:10};
             }
-            $scope.resourceSearchEntity.owner = 0;
+            if(!$scope.resourceSearchEntity.cfgIds)
+                $scope.resourceSearchEntity.owner = 0;
+            else{
+                delete $scope.resourceSearchEntity.owner;
+            }
             $http({
                 method:"POST",
                 url:"hasan/resource/list",
