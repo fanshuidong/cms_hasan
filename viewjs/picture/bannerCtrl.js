@@ -15,9 +15,8 @@ define(function (require) {
         $scope.query = function (reset) {
             if(reset){
                 $scope.resourceSearchEntity = {page:1,pageSize:10};
-            }
-            if(!$scope.resourceSearchEntity.cfgIds)
                 $scope.resourceSearchEntity.owner = 0;
+            }
             $http({
                 method:"POST",
                 url:"hasan/resource/list",
@@ -31,12 +30,22 @@ define(function (require) {
         $scope.query(true);
         //取消条件查询
         $scope.reset=function(){
+            $scope.cfgId="";
+            $scope.ownerId="";
             $scope.query(true)
         };
         $scope.search = function () {
-            if($scope.resourceSearchEntity.cfgId){
+            $scope.resourceSearchEntity.cfgIds = [1,1030,1031,1002];
+            if($scope.ownerId){
+                $scope.resourceSearchEntity.owner = $scope.ownerId;
+            }else{
+                $scope.resourceSearchEntity.owner =0;
+            }
+            if($scope.cfgId){
                 $scope.resourceSearchEntity.cfgIds = [];
-                $scope.resourceSearchEntity.cfgIds.push($scope.resourceSearchEntity.cfgId);
+                $scope.resourceSearchEntity.cfgIds.push($scope.cfgId);
+                if(!$scope.ownerId && $scope.cfgId==='1002')
+                    delete $scope.resourceSearchEntity.owner;
             }
             $scope.query()
         };

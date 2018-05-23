@@ -1,14 +1,14 @@
 <div class="tableToolbar">
     <div class="coll-md-8" id="addInput">
         <div class="coll-md-2">
-            <select class="form-control" data-ng-model="resourceSearchEntity.cfgId">
+            <select class="form-control" data-ng-model="cfgId">
                 <option value="" disabled selected hidden>选择资源类型</option>
                 <option data-ng-repeat="item in cfgResource" value="{{item.id}}" data-ng-show="item.type==1">{{item.name}}</option>
                 <option value="1002">商家名菜</option>
             </select>
         </div>
         <div class="coll-md-2">
-            <input type="number" data-ng-model="resourceSearchEntity.owner" class='search' placeholder="资源所属编号">
+            <input type="number" data-ng-model="ownerId" class='search' placeholder="资源所属编号">
         </div>
         <div class="coll-md-1">
             <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search()">
@@ -30,7 +30,7 @@
             <th>资源</th>
             <th>链接地址</th>
             <th>排序号</th>
-            <th>资源所属</th>
+            <th>资源所属编号</th>
             <th>添加时间</th>
             <th>操作</th>
         </tr>
