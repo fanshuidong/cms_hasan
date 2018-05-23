@@ -48,6 +48,7 @@
 <table>
     <thead>
     <tr>
+        <th>商品编号</th>
         <th>商品名称</th>
         <th>销售数量</th>
         <th>库存</th>
@@ -58,6 +59,7 @@
     </thead>
     <tbody>
     <tr ng-repeat="item in goodsList">
+        <td>{{item.id}}</td>
         <td>{{item.name}}</td>
         <td>{{item.sold}}</td>
         <td>{{item.inventory}}</td>
