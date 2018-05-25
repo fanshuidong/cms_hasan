@@ -260,6 +260,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/cfgResourceCtrl.js',
                 controller: "cfgResourceCtrl"
             })
+            .state("system.verse", {
+                url: "/verse",
+                templateUrl: "view/system/verse.html",
+                controllerUrl: 'viewjs/system/verseCtrl.js',
+                controller: "verseCtrl"
+            })
     }]);
 
     app.service("Url",function(){
