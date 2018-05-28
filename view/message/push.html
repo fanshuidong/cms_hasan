@@ -1,0 +1,25 @@
+<form class="form-horizontal" name="myForm" style="margin-top: 5%">
+    <div class="form-body" style="margin-left:15%;width: 50%">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label col-md-2">标题:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" data-ng-model="message.title"  required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label col-md-2">发送内容:</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="10" data-ng-model="message.content" required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttonArea col-md-12">
+            <button type="button" class="btn blue" ng-disabled="myForm.$invalid" data-ng-click="pushMessage()">提交</button>
+        </div>
+    </div>
+</form>
