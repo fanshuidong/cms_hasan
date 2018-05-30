@@ -107,6 +107,10 @@ define(function (require) {
                 }
             });
         };
+        $scope.editLink2 = function () {
+            $scope.linkViewModal = !$scope.linkViewModal;
+            $scope.query();
+        };
         $scope.delete = function (item) {
             if(confirm("确认删除该条记录吗？")){
                 $http({
@@ -199,7 +203,8 @@ define(function (require) {
                     if(data.response.code == "code.success"){
                         toastr.success("上传成功!");
                         $scope.resource.link = data.response.attach.url;
-                        $scope.editLink();
+                        $scope.editLink2();
+                        //$scope.linkViewModal = !$scope.linkViewModal;
                     }else{
                         toastr.error(data.response.desc);
                         $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("glyphicon-ok-sign");
