@@ -4,18 +4,24 @@
             <input type="text" class='search' placeholder="订单号" ng-model="orderSearchEntity.id">
         </div>
         <div class="coll-md-1">
-            <input type="text" class='search' placeholder="用户编号" ng-model="orderSearchEntity.uid">
+            <input type="text" class='search' placeholder="用户编号" ng-model="orderSearchEntity.recharger">
         </div>
         <div class="coll-md-1">
-            <select class="form-control" ng-model="orderSearchEntity.state">
-                <option disabled selected value="">订单状态</option>
-                <option  data-ng-repeat="item in orderState" value="{{item.value}}">{{item.text}}</option>
+            <select class="form-control" ng-model="orderSearchEntity.os">
+                <option disabled selected value="">操作系统</option>
+                <option  data-ng-repeat="item in os" value="{{item.value}}">{{item.text}}</option>
+            </select>
+        </div>
+        <div class="coll-md-1">
+            <select class="form-control" ng-model="orderSearchEntity.goodsType">
+                <option disabled selected value="">充值类型</option>
+                <option  data-ng-repeat="item in goodsType" value="{{item.mark}}">{{item.text}}</option>
             </select>
         </div>
         <div class="coll-md-3 scalenone"  id="searchdate" datahide>
             <div class="coll-md-5" >
                 <p class="input-group">
-                    <input type="text" class="search" placeholder="添加开始时间" uib-datepicker-popup="yyyy-MM-dd"
+                    <input type="text" class="search" placeholder="开始时间" uib-datepicker-popup="yyyy-MM-dd"
                            ng-model="timeStart" is-open="popup1.opened" datepicker-options="dateOptions"/>
                     <span class="input-group-btn">
 							            <button type="button" class="small-icon btn btn-default" ng-click="open1()"><i
@@ -25,7 +31,7 @@
             </div>
             <div class="coll-md-5">
                 <p class="input-group inline">
-                    <input type="text" class="search" placeholder="添加结束时间" uib-datepicker-popup="yyyy-MM-dd"
+                    <input type="text" class="search" placeholder="结束时间" uib-datepicker-popup="yyyy-MM-dd"
                            ng-model="timeStop" is-open="popup2.opened" datepicker-options="dateOptions"/>
                     <span class="input-group-btn">
 							            <button type="button" class="small-icon btn btn-default" ng-click="open2()"><i
@@ -53,32 +59,22 @@
 <table>
     <thead>
     <tr>
-        <th>订单号</th>
-        <th>用户编号</th>
-        <th>订单状态</th>
-        <th>订单价格</th>
-        <th>收件人</th>
-        <th>收件人地址</th>
-        <th>收件人联系电话</th>
-        <th>预约配送开始时间</th>
-        <th>预约配送结束时间</th>
-        <th>添加时间</th>
-        <th>操作</th>
+        <th>编号</th>
+        <th>操作系统</th>
+        <th>金额</th>
+        <th>充值用户</th>
+        <th>充值类型</th>
+        <th>充值时间</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="item in orderList">
         <td>{{item.id}}</td>
-        <td>{{item.uid}}</td>
-        <td>{{item.state|enumFilter:'orderState'}}</td>
-        <td>{{item.price | currency:'￥'}}</td>
-        <td>{{item.recipients}}</td>
-        <td>{{item.recipientsAddr}}</td>
-        <td>{{item.recipientsMobile}}</td>
-        <td>{{item.deliverStart | timeFilter}}</td>
-        <td>{{item.deliverStop | timeFilter}}</td>
+        <td>{{item.os | enumFilter:'os'}}</td>
+        <td>{{item.amount | currency:'￥'}}</td>
+        <td>{{item.recharger}}</td>
+        <td>{{item.goodsType | enumFilter:'goodsType'}}</td>
         <td>{{item.created | timeFilter}}</td>
-        <td><a data-ng-click="deliver(item.id)" data-ng-show="item.state=='PAID'">发货</a></td>
     </tr>
     </tbody>
 </table>

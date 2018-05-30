@@ -150,6 +150,12 @@ define(function (require) {
                 controllerUrl: 'viewjs/order/assistantCtrl.js',
                 controller: "assistantCtrl"
             })
+            .state("order.recharge", {
+                url: "/recharge",
+                templateUrl: "view/order/recharge.html",
+                controllerUrl: 'viewjs/order/rechargeCtrl.js',
+                controller: "rechargeCtrl"
+            })
 
             //商品管理
             .state("goods", {
@@ -266,6 +272,17 @@ define(function (require) {
                 controllerUrl: 'viewjs/system/verseCtrl.js',
                 controller: "verseCtrl"
             })
+            //账户管理
+            .state("account", {
+                url: "/account",
+                templateUrl: "view/include/module.html"
+            })
+            .state("account.list", {
+                url: "/list",
+                templateUrl: "view/account/list.html",
+                controllerUrl: 'viewjs/account/listCtrl.js',
+                controller: "listCtrl"
+            })
     }]);
 
     app.service("Url",function(){
@@ -329,6 +346,15 @@ define(function (require) {
             {value:"SEASON",text:"季度",mark:7},
             {value:"YEAR",text:"年",mark:8}
         ];
+        this.goodsType = [
+            {value:"VIRTUAL",text:"会员充值",mark:100},
+            {value:"OBJECT",text:"商品购买",mark:101}
+        ];
+        this.accountType = [
+            {value:"BASIC",text:"基本账户",mark:1},
+            {value:"SCORE",text:"积分账户",mark:2},
+            {value:"EXP",text:"体验金账户",mark:4}
+        ];
         this.enumConfig = {
             goodsState:this.goodsState,
             memberState:this.memberState,
@@ -338,6 +364,8 @@ define(function (require) {
             deviceType:this.deviceType,
             orderState:this.orderState,
             timeUnit:this.timeUnit,
+            goodsType:this.goodsType,
+            accountType:this.accountType,
             cfgResource:this.cfgResource
         };
         this.cuisineType = [

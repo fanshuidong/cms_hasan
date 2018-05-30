@@ -33,7 +33,7 @@ define(function (require) {
         $scope.query(true);
         // 切换页码时
         $scope.changePages=function(){
-            $scope.userSearchEntity.query.page=$scope.page;
+            $scope.userSearchEntity.page=$scope.page;
             $scope.query();
         };
         //条件查询
@@ -62,7 +62,7 @@ define(function (require) {
         };
         // 切换页码时
         $scope.changePages2=function(){
-            $scope.assistantUserSearchEntity.query.page=$scope.page2;
+            $scope.assistantUserSearchEntity.page=$scope.page2;
             $scope.query2();
         };
         //条件查询

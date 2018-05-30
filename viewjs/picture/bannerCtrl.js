@@ -35,7 +35,7 @@ define(function (require) {
             $scope.query(true)
         };
         $scope.search = function () {
-            $scope.resourceSearchEntity.cfgIds = [1,1030,1031,1002];
+            $scope.resourceSearchEntity.cfgIds = [1,1031,1002];
             if($scope.ownerId){
                 $scope.resourceSearchEntity.owner = $scope.ownerId;
             }else{

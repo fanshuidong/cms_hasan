@@ -97,7 +97,7 @@
                             <div class="form-group">
                                 <label  class="control-label col-md-4">菜谱食品:</label>
                                 <div class="col-md-8">
-                                    <select class="form-control" required ui-select2 ng-model="cookbook.goods" multiple>
+                                    <select class="form-control" ui-select2 ng-model="cookbook.goods" multiple>
                                         <option ng-repeat="item in goodsList" value="{{item.id}}">{{item.name}}</option>
                                     </select>
                                 </div>
