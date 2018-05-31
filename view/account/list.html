@@ -5,7 +5,7 @@
         </div>
         <div class="coll-md-1">
             <select class="form-control" ng-model="userSearchEntity.type">
-                <option disabled selected value="">操作系统</option>
+                <option disabled selected value="">账户类型</option>
                 <option  data-ng-repeat="item in accountType" value="{{item.value}}">{{item.text}}</option>
             </select>
         </div>
@@ -31,6 +31,8 @@
         <th>用户编号</th>
         <th>账户类型</th>
         <th>可用余额</th>
+        <th>冻结余额</th>
+        <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -38,9 +40,51 @@
         <td>{{item.owner}}</td>
         <td>{{item.type | enumFilter:'accountType'}}</td>
         <td>{{item.usable | currency:'￥'}}</td>
+        <td>{{item.frozen | currency:'￥'}}</td>
+        <td><a data-ng-click="openAdjustModal(item)">调账</a></td>
     </tr>
     </tbody>
 </table>
 <div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize">
     <uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages()"></uib-pagination>
 </div>
+<modal title="发货" visible="adjustModal">
+    <form class="form-horizontal" name="myForm">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label  class="control-label col-md-4">选择修改属性:<strong class="error" ng-if="myForm.Field.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-8">
+                            <select  class="form-control" data-ng-model="adjust.Field" name="Field">
+                                <option value="" selected disabled hidden>请选择</option>
+                                <option value="USABLE">可用余额</option>
+                                <option value="FROZEN">冻结余额</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label  class="control-label col-md-4">变动金额:<strong class="error" ng-if="myForm.amount.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-8">
+                            <input  type="text" data-ng-blur="validate()" class="form-control" data-ng-model="adjust.amount" name="amount" placeholder="大于0表示增加，小于0表示减少" required/>
+                            <span style="color: red">{{amountError}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label  class="control-label col-md-2">备注:<strong class="error" ng-if="myForm.memo.$invalid">&nbsp;(必填)</strong></label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" data-ng-model="adjust.memo" name="memo" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonArea col-md-12" style="border:none">
+                    <button type="button" class="btn blue" ng-disabled="myForm.$invalid" data-ng-click="adjust_()">提交</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>

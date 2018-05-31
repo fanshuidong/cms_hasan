@@ -45,5 +45,40 @@ define(function (require) {
         $scope.reset=function(){
             $scope.query(true);
         };
+
+        $scope.openAdjustModal = function (item) {
+            $scope.adjust={
+                owner:item.owner,
+                type:enums.getEntity("accountType",item.type).value,
+                ownerType:enums.getEntity("ownerType",item.ownerType).value
+            };
+            $scope.adjustModal = !$scope.adjustModal;
+        };
+
+        $scope.validate = function () {
+            if($scope.adjust.amount && !Number($scope.adjust.amount)){
+                $scope.amountError = "请输入正确的金额";
+            }else{
+                $scope.amountError="";
+            }
+        };
+
+        $scope.adjust_ = function () {
+            if(!Number($scope.adjust.amount)){
+                toastr.error("请输入正确的金额");
+                return;
+            }
+            $http({
+                method: 'POST',
+                url: "hasan/account/adjust",
+                data:$scope.adjust
+            }).success(function(data) {
+                if(data.code==='code.success'){
+                    toastr.success("提交成功！");
+                    $scope.adjustModal = !$scope.adjustModal;
+                    $scope.query();
+                }
+            });
+        }
     }]);
 });

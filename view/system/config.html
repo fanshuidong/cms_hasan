@@ -1,70 +1,12 @@
     <form class="form-horizontal" style="margin-top:20px;background:#fff;padding:20px 10px;">
         <div class="form-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6" data-ng-repeat="(key,item) in config">
                     <div class="form-group">
-                        <label class="control-label col-md-3">用户最大收货地址数：</label>
+                        <label class="control-label col-md-4">{{item.desc}}：</label>
                         <div class="col-md-8">
-                            <input type="text" id="address_maximum" class="form-control info" ng-model="info.address_maximum" >
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">默认显示评价数：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="default_evaluation_num" class="form-control info" ng-model="info.default_evaluation_num" >
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">默认会员称号：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="default_member_title" class="form-control info" ng-model="info.default_member_title" >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">配送预约时间最大显示数：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="delivery_time_maximum" class="form-control info" ng-model="info.delivery_time_maximum">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">快递费：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="express_fee" class="form-control info" ng-model="info.express_fee">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">订单配送预约提前时间(分钟)：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="order_advance_minutes" class="form-control info" ng-model="info.order_advance_minutes">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">资源地址前缀：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="resource_path" class="form-control info" ng-model="info.resource_path" >
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">资源url前缀：</label>
-                        <div class="col-md-8">
-                            <input type="text" id="resource_prefix" class="form-control info" ng-model="info.resource_prefix" >
+                            <input type="text" id="{{key}}" class="form-control info" value="{{item.value}}"
+                                   data-ng-blur="updateConfig(key,item.value)" ng-readonly="item.editable==0">
                         </div>
                     </div>
                 </div>

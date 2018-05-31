@@ -16,13 +16,13 @@ define(function (require) {
     }]);
     app.controller('AppController', ['$scope','$rootScope', '$http','enums',function($scope,$rootScope,$http,enums) {
         //获取后台系统配置
-        $http({
-            method: 'POST',
-            url:"hasan/common/configs",
-            data:{}
-        }).success(function(data) {
-            $rootScope.GlobalConfig=data.attach;
-        });
+        // $http({
+        //     method: 'POST',
+        //     url:"hasan/common/configs",
+        //     data:{}
+        // }).success(function(data) {
+        //     $rootScope.GlobalConfig=data.attach;
+        // });
         //获取后台图片资源配置
         $http({
             method: 'POST',
@@ -355,6 +355,9 @@ define(function (require) {
             {value:"SCORE",text:"积分账户",mark:2},
             {value:"EXP",text:"体验金账户",mark:4}
         ];
+        this.ownerType = [
+            {value:"USER",text:"用户",mark:1}
+        ];
         this.enumConfig = {
             goodsState:this.goodsState,
             memberState:this.memberState,
@@ -366,6 +369,7 @@ define(function (require) {
             timeUnit:this.timeUnit,
             goodsType:this.goodsType,
             accountType:this.accountType,
+            ownerType:this.ownerType,
             cfgResource:this.cfgResource
         };
         this.cuisineType = [
