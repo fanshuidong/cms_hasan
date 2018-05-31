@@ -56,15 +56,20 @@ define(function (require) {
             $scope.timeStop="";
             $scope.query(true);
         };
+        $scope.deliver  = function (id) {
+            $scope.order = {id:id};
+            $scope.deliverModal = !$scope.deliverModal;
+        };
         //发货
-        $scope.deliver = function (id) {
+        $scope.deliver_ = function () {
             $http({
                 method: 'POST',
                 url: "hasan/order/deliver",
-                data:{id:id}
+                data:$scope.order
             }).success(function(data) {
                 if(data.code == 'code.success'){
                     toastr.success("发货成功!");
+                    $scope.deliverModal = !$scope.deliverModal;
                     $scope.query();
                 }
             });

@@ -85,3 +85,23 @@
 <div style="width:100%;display:flex;align-content: center;justify-content:center;" ng-show="bigTotalItems > defaultPageSize">
     <uib-pagination first-text="首页" last-text="末页" previous-text="上一页" next-text="下一页" total-items="bigTotalItems" ng-model="page" max-size="maxSize" class="pagination-sm" boundary-links="true" force-ellipses="true"  ng-change="changePages()"></uib-pagination>
 </div>
+
+<modal title="发货" visible="deliverModal">
+    <form class="form-horizontal" name="myForm">
+        <div class="form-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="form-group">
+                            <label  class="control-label col-md-4">运单号:<strong class="error" ng-if="myForm.expressNo.$invalid">&nbsp;(必填)</strong></label>
+                            <div class="col-md-8">
+                                <input  type="text" class="form-control" data-ng-model="order.expressNo" name="expressNo" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttonArea col-md-12" style="border:none">
+                        <button type="button" class="btn blue" ng-disabled="myForm.$invalid" data-ng-click="deliver_()">提交</button>
+                    </div>
+                </div>
+        </div>
+    </form>
+</modal>
