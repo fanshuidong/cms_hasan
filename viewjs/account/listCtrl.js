@@ -49,8 +49,8 @@ define(function (require) {
         $scope.openAdjustModal = function (item) {
             $scope.adjust={
                 owner:item.owner,
-                type:enums.getEntity("accountType",item.type).value,
-                ownerType:enums.getEntity("ownerType",item.ownerType).value
+                type:item.type,
+                ownerType:item.ownerType
             };
             $scope.adjustModal = !$scope.adjustModal;
         };

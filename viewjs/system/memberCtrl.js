@@ -45,10 +45,11 @@ define(function (require) {
         $scope.update=function(item){
             $scope.isEdit = true;
             $scope.memberModal = !$scope.memberModal;
-            for(i in item)
+            $scope.member={};
+            for(var i in item)
                 $scope.member[i] = item[i];
             $scope.member.sale = String($scope.member.sale);
-            $scope.member.timeUnit = enums.getEntity("timeUnit",$scope.member.timeUnit).value;
+            //$scope.member.timeUnit = enums.getEntity("timeUnit",$scope.member.timeUnit).value;
         };
 
         //添加编辑

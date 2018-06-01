@@ -50,7 +50,7 @@ define(function (require) {
             $scope.isEdit = true;
             $scope.addModal = !$scope.addModal;
             $scope.scheduler = item;
-            $scope.scheduler.type = enums.getEntity("schedulerType",$scope.scheduler.type).value;
+            //$scope.scheduler.type = enums.getEntity("schedulerType",$scope.scheduler.type).value;
             $scope.scheduler.range = $filter('minutesFilter')($scope.scheduler.start)+" - "+$filter('minutesFilter')($scope.scheduler.stop)
         };
 
