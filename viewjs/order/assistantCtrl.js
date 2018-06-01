@@ -34,7 +34,7 @@ define(function (require) {
 
         // 切换页码时
         $scope.changePages=function(){
-            $scope.orderSearchEntity.query.page=$scope.page;
+            $scope.orderSearchEntity.page=$scope.page;
             $scope.query();
         };
         //条件查询
