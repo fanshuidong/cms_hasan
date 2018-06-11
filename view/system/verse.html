@@ -18,7 +18,8 @@
     <thead>
     <tr>
         <th>编号</th>
-        <th>内容</th>
+        <th>描述一</th>
+        <th>描述二</th>
         <th>创建时间</th>
         <th>操作</th>
     </tr>
@@ -26,7 +27,8 @@
     <tbody>
     <tr ng-repeat="item in orderParams">
         <td>{{item.id}}</td>
-        <td>{{item.content}}</td>
+        <td>{{item.content1}}</td>
+        <td>{{item.content2}}</td>
         <td>{{item.created | timeFilter}}</td>
         <td>
             <a ng-click="update(item)">编辑</a>
@@ -45,10 +47,18 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label col-md-4">生活百味:</label>
+                            <label class="control-label col-md-4">日历描述一:</label>
                             <div class="col-md-8">
-                                <textarea class="form-control" maxlength="60" data-ng-model="verse.content"
-                                          placeholder="最多输入60个字" rows="8" cols="15" required>
+                                <textarea class="form-control" maxlength="14" data-ng-model="verse.content1"
+                                          placeholder="最多输入14个字" rows="2" cols="14" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4">日历描述二:</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" maxlength="11" data-ng-model="verse.content2"
+                                          placeholder="最多输入11个字" rows="2" cols="14" required>
                                 </textarea>
                             </div>
                         </div>
