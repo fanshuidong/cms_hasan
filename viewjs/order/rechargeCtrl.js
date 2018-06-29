@@ -11,6 +11,7 @@ define(function (require) {
         datepicker($scope);
         $scope.os = enums.os;
         $scope.goodsType = enums.goodsType;
+        $scope.rechargeState = enums.rechargeState;
         $scope.selectOptions = {
             allowClear: false,
             language : 'zh-CN'

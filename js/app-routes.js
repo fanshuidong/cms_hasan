@@ -42,9 +42,12 @@ define(function (require) {
                     url: "hasan/common/logout",
                     data:{}
                 }).success(function(data) {
-                    if(data.code=="code.success")
+                    if(data.code==="code.success")
                         window.location.href = "login.html";
-                }).error(function(data) {});
+                }).error(function(data) {
+                    window.localStorage.removeItem("h_token");
+                    window.location.href = "login.html";
+                });
             };
             $scope.changePsw = function() {
                 $scope.changeModal = !$scope.changeModal;
@@ -287,7 +290,7 @@ define(function (require) {
 
     app.service("Url",function(){
         this.hasan = {
-            zxlUrl:"http://172.16.20.86:80/",
+            zxlUrl:"http://172.16.20.144:8080/",
             fsdUrl:"http://localhost:8089/",
             online:"http://121.196.193.96/"
         };
@@ -358,6 +361,16 @@ define(function (require) {
         this.ownerType = [
             {value:"USER",text:"用户",mark:1}
         ];
+        //充值状态
+        this.rechargeState = [
+            {value:"INIT",text:"本地创建",mark:1},
+            {value:"WAIT_PAY",text:"平台创建",mark:2},
+            {value:"SUCCESS",text:"支付成功",mark:3},
+            {value:"CLOSE",text:"订单关闭,已退款",mark:4},
+            {value:"FINISH",text:"订单关闭，且不可退款",mark:5},
+            {value:"TIMEOUT",text:"本地超时",mark:6}
+        ];
+
         this.enumConfig = {
             goodsState:this.goodsState,
             memberState:this.memberState,
@@ -370,6 +383,7 @@ define(function (require) {
             goodsType:this.goodsType,
             accountType:this.accountType,
             ownerType:this.ownerType,
+            rechargeState:this.rechargeState,
             cfgResource:this.cfgResource
         };
         this.cuisineType = [

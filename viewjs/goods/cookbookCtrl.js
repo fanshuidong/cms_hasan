@@ -267,32 +267,35 @@ define(function (require) {
                 initialPreviewFileType: 'image',
                 initialPreview: initialPreview,
                 initialPreviewConfig: initialPreviewConfig
-            }).on("fileuploaded", function (event, data, previewId, index) {
-                console.log(data);
-                if(data.response.code == "code.success"){
-                    // toastr.success("上传成功！");
-                    $("#"+previewId).find(".kv-file-remove").click(function(){
-                        $http({
-                            method: 'POST',
-                            url: "hasan/resource/delete",
-                            data: {id: data.response.attach.id}
-                        }).success(function (data) {
-                            if (data.code == "code.success") {
-                                // toastr.success("删除成功！");
-                            }
-                        });
-                    });
-                }else{
-                    toastr.error(data.response.desc);
-                    // $(".file-error-message").show();
-                    // $(".file-error-message").text(data.response.desc);
-                    $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("glyphicon-ok-sign");
-                    $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("text-success");
-                    $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("glyphicon-exclamation-sign");
-                    $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("glyphicon-exclamation-sign");
-                    $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("text-danger");
-                }
             });
+            if(!$scope.callbacked) {
+                $scope.callbacked = true;
+                $("#"+id).on("fileuploaded", function (event, data, previewId, index) {
+                    if(data.response.code === "code.success"){
+                        toastr.success("上传成功！");
+                        $("#"+previewId).find(".kv-file-remove").click(function(){
+                            $http({
+                                method: 'POST',
+                                url: "hasan/resource/delete",
+                                data: {id: data.response.attach.id}
+                            }).success(function (data) {
+                                if (data.code == "code.success") {
+                                    toastr.success("删除成功！");
+                                }
+                            });
+                        });
+                    }else{
+                        toastr.error(data.response.desc);
+                        // $(".file-error-message").show();
+                        // $(".file-error-message").text(data.response.desc);
+                        $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("glyphicon-ok-sign");
+                        $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").removeClass("text-success");
+                        $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("glyphicon-exclamation-sign");
+                        $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("glyphicon-exclamation-sign");
+                        $("#"+previewId).find(".file-upload-indicator").children(".glyphicon").addClass("text-danger");
+                    }
+                });
+            }
         };
     }]);
 });

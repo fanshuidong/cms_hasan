@@ -4,29 +4,25 @@ define(function (require) {
     app.factory('httpInterceptor',['$q','$injector','$timeout','Url','$rootScope',function ($q, $injector,$timeout,Url,$rootScope){
         return{
             request:function(config) {
+                //去除空数据参数
+                for(var key in config.data)
+                    if(!config.data[key])
+                        delete config.data[key];
+                //添加token
                 config.headers = config.headers || {};
                 config.headers.token = window.localStorage.getItem("h_token");
                 if(!config.headers.token){
                     window.location.href = "login.html";
                     return;
                 }
-                if(config.method=="POST"){
+                //统一添加访问路径前缀
+                if(config.method==="POST"){
                     $rootScope.response = false;
                     setTimeout(function(){
                         if(!$rootScope.response)
                             $('.landmark').addClass('landmark-block');
                     }, 500);
-                    // setTimeout(function(){
-                    //     if(!$rootScope.response){
-                    //         $('.landmark').removeClass('landmark-block');
-                    //         toastr.error("服务器异常，请稍后再试");
-                    //     }
-                    // }, 10000);
                     config.url = Url.hasan[window.localStorage.getItem("h_apiUrl")]+config.url;
-                    // config.data.client = "BROWSER";
-                    // config.data.usernameType = "MOBILE";
-                    // config.data.deviceType = "PC";
-                    // config.data.os = "WINDOWS";
                 }
                 return config;
             },
@@ -35,10 +31,11 @@ define(function (require) {
                 return $q.reject(config);
             },
             response : function(response){
-                if(response.data.code == 'code.user.invalid.token'){
+                if(response.data.code === 'code.user.invalid.token'){
+                    window.localStorage.removeItem("h_token");
                     window.location.href = "login.html";
                 }
-                if(response.data.code && response.data.code!= "code.success"){
+                if(response.data.code && response.data.code!== "code.success"){
                     toastr.error(response.data.desc);
                 }
                 $rootScope.response = true;
@@ -46,7 +43,8 @@ define(function (require) {
                 return response;
             },
             responseError : function(response) {
-                if(!window.sessionStorage.getItem("token")){
+                if(!window.localStorage.getItem("token")){
+                    window.location.href = "login.html";
                     return response;
                 }
                 toastr.error("服务器异常，请稍后再试");

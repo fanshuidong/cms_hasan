@@ -38,7 +38,7 @@ define(function (require) {
         //创建
         $scope.add=function(){
             $scope.isEdit = false;
-            $scope.member={};
+            $scope.member={countLimit:0};
             $scope.memberModal = !$scope.memberModal;
         };
         //修改

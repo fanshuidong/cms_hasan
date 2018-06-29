@@ -18,6 +18,12 @@
                 <option  data-ng-repeat="item in goodsType" value="{{item.mark}}">{{item.text}}</option>
             </select>
         </div>
+        <div class="coll-md-1">
+            <select class="form-control" ng-model="orderSearchEntity.state">
+                <option disabled selected value="">充值状态</option>
+                <option  data-ng-repeat="item in rechargeState" value="{{item.value}}">{{item.text}}</option>
+            </select>
+        </div>
         <div class="coll-md-3 scalenone"  id="searchdate" datahide>
             <div class="coll-md-5" >
                 <p class="input-group">
@@ -64,6 +70,7 @@
         <th>金额</th>
         <th>充值用户</th>
         <th>充值类型</th>
+        <th>充值状态</th>
         <th>充值时间</th>
     </tr>
     </thead>
@@ -74,6 +81,7 @@
         <td>{{item.amount | currency:'￥'}}</td>
         <td>{{item.recharger}}</td>
         <td>{{item.goodsType | enumFilter:'goodsType'}}</td>
+        <td>{{item.state | enumFilter:'rechargeState'}}</td>
         <td>{{item.created | timeFilter}}</td>
     </tr>
     </tbody>
