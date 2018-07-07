@@ -29,7 +29,7 @@ define(function (require) {
                 }
             },
             edit: {
-                enable: true,
+                enable: false,
                 showRenameBtn: false
             },
             callback: {
