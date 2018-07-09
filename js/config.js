@@ -6,7 +6,7 @@ define(function (require) {
             request:function(config) {
                 //去除空数据参数
                 for(var key in config.data)
-                    if(!config.data[key])
+                    if(config.data[key]==='' || config.data[key]===undefined)
                         delete config.data[key];
                 //添加token
                 config.headers = config.headers || {};
