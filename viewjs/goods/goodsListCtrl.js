@@ -115,6 +115,27 @@ define(function (require) {
                 // $scope.goods.ownerPrice= $scope.goods.ownerPrice;
                 $scope.goodsResource=data.attach.resources;
                 $scope.initFileInput();
+
+                //获取会员列表
+                // $http({
+                //     method: 'POST',
+                //     url:"hasan/common/members",
+                //     data:{sale:true}
+                // }).success(function(data) {
+                //     $scope.prices=data.attach.list;
+                //     for(var i = 0; i<$scope.prices.length;i++){
+                //         var contain = false;
+                //         for(var j = 0; j<$scope.members.length;j++){
+                //             if($scope.members[j].memberId === $scope.prices[i].id){
+                //                 contain = true;
+                //                 break;
+                //             }
+                //         }
+                //         if(!contain){
+                //             $scope.members.push({name:$scope.prices[i].name,memberId:$scope.prices[i].id,price:""});
+                //         }
+                //     }
+                // });
             });
         };
 
@@ -148,7 +169,7 @@ define(function (require) {
                 url: $scope.isAdd?"hasan/goods/add":"hasan/goods/modify",
                 data:$scope.goods
             }).success(function(data) {
-                if (data.code == "code.success") {
+                if (data.code === "code.success") {
                     toastr.success("提交成功！");
                     $scope.query();
                     if($scope.isAdd){
@@ -169,7 +190,7 @@ define(function (require) {
                     url: "hasan/goods/delete",
                     data: {id: id}
                 }).success(function (data) {
-                    if (data.code == "code.success") {
+                    if (data.code === "code.success") {
                         toastr.success("删除成功！");
                         $scope.query(true);
                     }
@@ -183,7 +204,7 @@ define(function (require) {
                 var initialPreview = [];
                 if($scope.goodsResource){//编辑有初始化图片
                     for(var key in $scope.goodsResource){
-                        if(key == $scope.cfgGoodsResource[i].id){
+                        if(key === $scope.cfgGoodsResource[i].id){
                             for(var j = 0;j<$scope.goodsResource[key].length;j++){
                                 initialPreviewConfig.push({
                                     caption:$scope.goodsResource[key][j].name,
