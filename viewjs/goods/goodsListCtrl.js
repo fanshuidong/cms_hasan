@@ -117,25 +117,25 @@ define(function (require) {
                 $scope.initFileInput();
 
                 //获取会员列表
-                // $http({
-                //     method: 'POST',
-                //     url:"hasan/common/members",
-                //     data:{sale:true}
-                // }).success(function(data) {
-                //     $scope.prices=data.attach.list;
-                //     for(var i = 0; i<$scope.prices.length;i++){
-                //         var contain = false;
-                //         for(var j = 0; j<$scope.members.length;j++){
-                //             if($scope.members[j].memberId === $scope.prices[i].id){
-                //                 contain = true;
-                //                 break;
-                //             }
-                //         }
-                //         if(!contain){
-                //             $scope.members.push({name:$scope.prices[i].name,memberId:$scope.prices[i].id,price:""});
-                //         }
-                //     }
-                // });
+                $http({
+                    method: 'POST',
+                    url:"hasan/common/members",
+                    data:{sale:true}
+                }).success(function(data) {
+                    $scope.prices=data.attach.list;
+                    for(var i = 0; i<$scope.prices.length;i++){
+                        var contain = false;
+                        for(var j = 0; j<$scope.members.length;j++){
+                            if($scope.members[j].memberId === $scope.prices[i].id){
+                                contain = true;
+                                break;
+                            }
+                        }
+                        if(!contain){
+                            $scope.members.push({name:$scope.prices[i].name,memberId:$scope.prices[i].id,price:""});
+                        }
+                    }
+                });
             });
         };
 
@@ -190,7 +190,7 @@ define(function (require) {
                     url: "hasan/goods/delete",
                     data: {id: id}
                 }).success(function (data) {
-                    if (data.code === "code.success") {
+                    if (data.code == "code.success") {
                         toastr.success("删除成功！");
                         $scope.query(true);
                     }
@@ -204,7 +204,7 @@ define(function (require) {
                 var initialPreview = [];
                 if($scope.goodsResource){//编辑有初始化图片
                     for(var key in $scope.goodsResource){
-                        if(key === $scope.cfgGoodsResource[i].id){
+                        if(key == $scope.cfgGoodsResource[i].id){
                             for(var j = 0;j<$scope.goodsResource[key].length;j++){
                                 initialPreviewConfig.push({
                                     caption:$scope.goodsResource[key][j].name,

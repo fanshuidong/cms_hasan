@@ -43,7 +43,8 @@ require.config({
         'bootbox':{exports:'bootbox'},
         'upload':{deps: ['angular','upload-shim'],exports : 'Upload'},
         'highchartng':{deps: ['angular','highchart']},
-        'angular-datepicker':{deps: ['angular'],exports:'datePicker'}
+        'angular-datepicker':{deps: ['angular'],exports:'datePicker'},
+        'bootstrap-fileinput-zh':{deps:['bootstrap-fileinput']}
 
     }
 });

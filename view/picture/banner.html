@@ -3,12 +3,11 @@
         <div class="coll-md-2">
             <select class="form-control" data-ng-model="cfgId">
                 <option value="" disabled selected hidden>选择资源类型</option>
-                <option data-ng-repeat="item in cfgResource" value="{{item.id}}" data-ng-show="item.type==1">{{item.name}}</option>
-                <option value="1002">商家名菜</option>
+                <option data-ng-repeat="item in cfgResource" value="{{item.id}}">{{item.name}}</option>
             </select>
         </div>
         <div class="coll-md-2">
-            <input type="number" data-ng-model="ownerId" class='search' placeholder="资源所属编号">
+            <input type="text" data-ng-model="resourceSearchEntity.name" class='search' placeholder="资源名称">
         </div>
         <div class="coll-md-1">
             <input type="button" class="small-icon search2-icon" value="搜索" ng-click="search()">
@@ -98,6 +97,13 @@
                         <label class="control-label col-md-4">资源排序号</label>
                         <div class="col-md-8">
                             <input type="number" class="form-control" data-ng-model="resource.priority" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input id="updateResource" name="source" type="file"/>
                         </div>
                     </div>
                 </div>
