@@ -137,7 +137,7 @@ define(function (require) {
                     url: "hasan/cookbook/delete",
                     data: {id: id}
                 }).success(function (data) {
-                    if (data.code == "code.success") {
+                    if (data.code === "code.success") {
                         toastr.success("删除成功！");
                         $scope.query(true);
                     }
@@ -279,7 +279,7 @@ define(function (require) {
                                 url: "hasan/resource/delete",
                                 data: {id: data.response.attach.id}
                             }).success(function (data) {
-                                if (data.code == "code.success") {
+                                if (data.code === "code.success") {
                                     toastr.success("删除成功！");
                                 }
                             });
